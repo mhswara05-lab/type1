@@ -424,8 +424,8 @@
             justify-content: space-between;
             font-size: 0.8rem;
             color: var(--text-light-secondary);
-            padding: 0 5px;
-            margin-top: 0.5rem;
+            padding: 0;
+            margin-top: 0.75rem;
         }
 
         input[type="range"] {
@@ -437,6 +437,7 @@
             border-radius: 5px;
             outline: none;
             margin: 1rem 0;
+            cursor: pointer;
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -679,6 +680,24 @@
         .global-circle .progress-circle-value { font-size: 3.5rem; }
         .element-circle .progress-circle-value { font-size: 2rem; }
         .dimension-circle .progress-circle-value { font-size: 1.8rem; }
+
+        .curiosity-result {
+            text-align: center;
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .curiosity-result-type {
+            font-size: 1rem;
+            color: var(--text-light-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .curiosity-result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+        }
         
         #restart-btn {
             background-color: transparent;
@@ -902,20 +921,15 @@
 
             // KONFIGURASI HALAMAN KUESIONER
             const pagesConfig = [];
-            const questionsPerPageA = 4;
-            const questionsPerPageB = 5; 
+            const partA = questions.filter(q => q.element === 'A1' || q.element === 'A2' || q.element === 'A3');
+            const partB1 = questions.filter(q => q.element === 'B1');
+            const partB2 = questions.filter(q => q.element === 'B2');
 
-            // Kelompokkan semua soal Tipe A
-            const questionsA = questions.filter(q => q.type === 'A');
-            for (let i = 0; i < questionsA.length; i += questionsPerPageA) {
-                pagesConfig.push(questionsA.slice(i, i + questionsPerPageA));
-            }
-            
-            // Kelompokkan semua soal Tipe B
-            const questionsB = questions.filter(q => q.type === 'B');
-             for (let i = 0; i < questionsB.length; i += questionsPerPageB) {
-                pagesConfig.push(questionsB.slice(i, i + questionsPerPageB));
-            }
+            pagesConfig.push(partA.slice(0, 10));
+            pagesConfig.push(partA.slice(10, 20));
+            pagesConfig.push(partA.slice(20, 31));
+            pagesConfig.push(partB1);
+            pagesConfig.push(partB2);
             
             const totalPages = pagesConfig.length;
 
@@ -938,6 +952,15 @@
             const prototypeBtn = document.getElementById('prototype-btn');
             const instructionTextContainer = document.getElementById('instruction-text-container');
             const elementsContainer = document.getElementById('elements-container');
+
+            const sliderLabelsText = {
+                1: "Sangat Tidak Sesuai",
+                2: "Tidak Sesuai",
+                3: "Agak Tidak Sesuai",
+                4: "Cukup Sesuai",
+                5: "Sesuai",
+                6: "Sangat Sesuai"
+            };
             
             // =================================================================================
             // Fungsi Inti
@@ -1012,7 +1035,7 @@
                         questionHTML += `
                             <p class="question-text">${q.text}</p>
                             <div class="slider-container">
-                                <div class="slider-value-popup">${value}</div>
+                                <div class="slider-value-popup">${sliderLabelsText[value]}</div>
                                 <input type="range" id="q_${q.id}" data-question-id="${q.id}" data-index="${originalIndex}" min="1" max="6" value="${value}" step="1">
                                 <div class="slider-labels">
                                     <span>Sangat Tidak Sesuai</span>
@@ -1025,11 +1048,11 @@
                             <p class="question-text">Pilihlah pernyataan yang paling sesuai dengan diri Anda:</p>
                             <div class="choice-container">
                                 <div class="choice-btn ${selectedValue === 'I' ? 'selected' : ''}" data-question-id="${q.id}" data-value="I" data-index="${originalIndex}">
-                                    <span>Pilihan I</span>
+                                    <span>A</span>
                                     <p>${q.textI}</p>
                                 </div>
                                 <div class="choice-btn ${selectedValue === 'D' ? 'selected' : ''}" data-question-id="${q.id}" data-value="D" data-index="${originalIndex}">
-                                    <span>Pilihan D</span>
+                                    <span>B</span>
                                     <p>${q.textD}</p>
                                 </div>
                             </div>`;
@@ -1052,6 +1075,25 @@
                     slider.addEventListener('touchstart', (e) => e.target.previousElementSibling.style.opacity = '1');
                     slider.addEventListener('mouseup', (e) => e.target.previousElementSibling.style.opacity = '0');
                     slider.addEventListener('touchend', (e) => e.target.previousElementSibling.style.opacity = '0');
+
+                    slider.addEventListener('click', (e) => {
+                        const sliderEl = e.target;
+                        const rect = sliderEl.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left;
+                        const percent = clickX / rect.width;
+                        
+                        const min = parseFloat(sliderEl.min);
+                        const max = parseFloat(sliderEl.max);
+                        const range = max - min;
+                        
+                        const rawValue = (percent * range) + min;
+                        const newValue = Math.round(rawValue);
+
+                        sliderEl.value = Math.max(min, Math.min(max, newValue));
+
+                        sliderEl.dispatchEvent(new Event('input', { bubbles: true }));
+                        sliderEl.dispatchEvent(new Event('change', { bubbles: true }));
+                    });
                 });
 
                 document.querySelectorAll('.choice-btn').forEach(button => {
@@ -1098,7 +1140,7 @@
                 slider.style.setProperty('--thumb-color', color);
 
                 const popup = slider.previousElementSibling;
-                popup.textContent = value;
+                popup.textContent = sliderLabelsText[value];
                 const thumbWidth = 24;
                 const popupPosition = (percentage / 100) * (slider.offsetWidth - thumbWidth) + (thumbWidth / 2);
                 popup.style.left = `${popupPosition}px`;
@@ -1206,12 +1248,20 @@
                     finalElementScores[elId] = dimsOfElement.length > 0 ? totalScore / dimsOfElement.length : 0;
                 });
                 
-                const globalScore = (finalElementScores.A1 + finalElementScores.A2 + finalElementScores.A3 + finalElementScores.B1 + finalElementScores.B2) / 5;
+                const globalScore = (finalElementScores.A1 + finalElementScores.A2 + finalElementScores.A3) / 3;
+
+                let curiosityType = 'Balance';
+                if (scores['B21'].total > scores['B22'].total) {
+                    curiosityType = 'Interest';
+                } else if (scores['B22'].total > scores['B21'].total) {
+                    curiosityType = 'Deprivation';
+                }
 
                 return {
                     globalScore: globalScore,
                     dimensionScores: scores,
-                    elementScores: finalElementScores
+                    elementScores: finalElementScores,
+                    curiosityType: curiosityType,
                 };
             }
 
@@ -1267,46 +1317,87 @@
                     
                     const elementScore = results.elementScores[elId];
 
-                    let dimensionsHTML = '';
-                    const dimsOfElement = Object.keys(dimensionDetails).filter(dimId => dimensionDetails[dimId].element === elId);
+                    let innerContent = '';
 
-                    dimsOfElement.forEach(dimId => {
-                        const dimData = results.dimensionScores[dimId];
-                        if (dimData) {
-                            const normalizedScore = dimData.normalized;
-                            dimensionsHTML += `
-                                <div class="dimension-card">
-                                    <h4>${dimensionDetails[dimId].name}</h4>
-                                    <div class="progress-circle dimension-circle" data-score="${normalizedScore}">
-                                        <svg viewBox="0 0 100 100">
-                                            <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
-                                            <circle class="fg-circle" cx="50" cy="50" r="45"></circle>
-                                        </svg>
-                                        <div class="progress-circle-value">0</div>
+                    if (elId === 'B2') { // Special case for Curiosity
+                        const curiosityType = results.curiosityType;
+                        let dimensionsHTML = '';
+                        ['B21', 'B22'].forEach(dimId => {
+                            const dimData = results.dimensionScores[dimId];
+                            if(dimData) {
+                                const normalizedScore = dimData.normalized;
+                                dimensionsHTML += `
+                                    <div class="dimension-card">
+                                        <h4>${dimensionDetails[dimId].name}</h4>
+                                        <div class="progress-circle dimension-circle" data-score="${normalizedScore}">
+                                            <svg viewBox="0 0 100 100">
+                                                <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
+                                                <circle class="fg-circle" cx="50" cy="50" r="45"></circle>
+                                            </svg>
+                                            <div class="progress-circle-value">0</div>
+                                        </div>
                                     </div>
-                                </div>
-                            `;
-                        }
-                    });
+                                `;
+                            }
+                        });
 
-                    elementCard.innerHTML = `
-                        <div class="element-summary">
-                             <div class="element-info">
-                                <h3>${elementDetails[elId].name}</h3>
-                                <p class="element-interpretation">${getInterpretation(elementScore)}</p>
-                             </div>
-                            <div class="progress-circle element-circle" data-score="${elementScore}">
-                                <svg viewBox="0 0 100 100">
-                                    <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
-                                    <circle class="fg-circle" cx="50" cy="50" r="45"></circle>
-                                </svg>
-                                <div class="progress-circle-value">0</div>
+                        innerContent = `
+                            <div class="element-summary">
+                                <div class="element-info">
+                                    <h3>${elementDetails[elId].name}</h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="element-dimensions-grid">
-                            ${dimensionsHTML}
-                        </div>
-                    `;
+                             <div class="curiosity-result">
+                                <p class="curiosity-result-type">Tipe Curiosity Anda:</p>
+                                <span class="curiosity-result-value">${curiosityType}</span>
+                            </div>
+                            <div class="element-dimensions-grid">
+                                ${dimensionsHTML}
+                            </div>
+                        `;
+                    } else { // Standard display for other elements
+                        let dimensionsHTML = '';
+                        const dimsOfElement = Object.keys(dimensionDetails).filter(dimId => dimensionDetails[dimId].element === elId);
+
+                        dimsOfElement.forEach(dimId => {
+                            const dimData = results.dimensionScores[dimId];
+                            if (dimData) {
+                                const normalizedScore = dimData.normalized;
+                                dimensionsHTML += `
+                                    <div class="dimension-card">
+                                        <h4>${dimensionDetails[dimId].name}</h4>
+                                        <div class="progress-circle dimension-circle" data-score="${normalizedScore}">
+                                            <svg viewBox="0 0 100 100">
+                                                <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
+                                                <circle class="fg-circle" cx="50" cy="50" r="45"></circle>
+                                            </svg>
+                                            <div class="progress-circle-value">0</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        });
+
+                        innerContent = `
+                            <div class="element-summary">
+                                 <div class="element-info">
+                                    <h3>${elementDetails[elId].name}</h3>
+                                    <p class="element-interpretation">${getInterpretation(elementScore)}</p>
+                                 </div>
+                                <div class="progress-circle element-circle" data-score="${elementScore}">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
+                                        <circle class="fg-circle" cx="50" cy="50" r="45"></circle>
+                                    </svg>
+                                    <div class="progress-circle-value">0</div>
+                                </div>
+                            </div>
+                            <div class="element-dimensions-grid">
+                                ${dimensionsHTML}
+                            </div>
+                        `;
+                    }
+                    elementCard.innerHTML = innerContent;
                     elementsContainer.appendChild(elementCard);
                 });
                 
@@ -1321,12 +1412,13 @@
                             const circle = entry.target;
                             const score = circle.dataset.score;
                             
-                            let radius = 45; // Default for global and element
+                            let radius = 45;
+                            let circumference = 283; // for global and element
                             if (circle.classList.contains('dimension-circle')) {
-                                radius = 45; // Same radius for visual consistency inside the SVG
+                                radius = 45; 
+                                circumference = 283;
                             }
 
-                            const circumference = 2 * Math.PI * radius;
                             const offset = circumference - (score / 100) * circumference;
                             
                             const fgCircle = circle.querySelector('.fg-circle');
