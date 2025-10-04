@@ -806,18 +806,21 @@
                 } else {
                     questionCard.style.borderLeftColor = 'var(--accent-green)';
                 }
-
-                // Auto-scroll to next question on the same page
-                const questionsOnCurrentPage = pagesConfig[currentQuestionPage];
-                const currentIndexOnPage = questionsOnCurrentPage.findIndex(q => q.id === questionId);
                 
-                if (currentIndexOnPage < questionsOnCurrentPage.length - 1) {
-                    const nextQuestionId = questionsOnCurrentPage[currentIndexOnPage + 1].id;
-                    const nextOriginalIndex = questions.findIndex(q => q.id === nextQuestionId);
-                    const nextQuestionEl = document.getElementById(`question-${nextOriginalIndex}`);
-                    if (nextQuestionEl) {
-                        setTimeout(() => {
-                           nextQuestionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const questionsOnCurrentPage = pagesConfig[currentQuestionPage];
+                const allAnsweredOnPage = questionsOnCurrentPage.every(q => answers.hasOwnProperty(q.id));
+                const isLastQuestionOnPage = questionsOnCurrentPage[questionsOnCurrentPage.length - 1].id === questionId;
+
+                if (allAnsweredOnPage && currentQuestionPage < totalPages - 1) {
+                     setTimeout(() => {
+                        nextBtn.click();
+                    }, 500);
+                } else if (!isLastQuestionOnPage) {
+                    const currentCard = document.getElementById(`question-${index}`);
+                    const nextCard = currentCard.nextElementSibling;
+                    if (nextCard && nextCard.classList.contains('question-card')) {
+                         setTimeout(() => {
+                            nextCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }, 200);
                     }
                 }
