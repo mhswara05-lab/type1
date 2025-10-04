@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Individual Digital Readiness (IDR) Test</title>
+    <title>Integrated Digital Readiness (IDR) Test</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -202,7 +202,7 @@
         .welcome-left, .welcome-right { flex: 1; padding: 3rem; }
         .welcome-left { background-color: var(--container-secondary); text-align: left; }
         .welcome-right { display: flex; flex-direction: column; }
-        .button-container { margin-top: 2.5rem; text-align: center; }
+        .button-container { margin-top: auto; padding-top: 1.5rem; text-align: center; }
 
         @media (max-width: 800px) {
             .welcome-split-layout { flex-direction: column; }
@@ -214,7 +214,7 @@
         #welcome-page h1 { font-size: 2.2rem; line-height: 1.2; margin-bottom: 1rem; text-align: left; }
         h2 { font-size: 1.8rem; }
         h3 { font-size: 1.2rem; }
-        #welcome-page p { font-size: 1.05rem; max-width: 45ch; text-align: left; margin-left: 0; margin-right: 0; }
+        #welcome-page p { font-size: 1rem; max-width: 55ch; text-align: left; margin-left: 0; margin-right: 0; line-height: 1.7; }
         p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; text-align: left; }
@@ -298,8 +298,9 @@
         .choice-btn:hover { border-color: var(--accent-green); background-color: rgba(163, 230, 53, 0.05); }
         .choice-btn.selected { border-color: var(--accent-green); background-color: var(--glow-color); box-shadow: 0 0 10px var(--glow-color); }
         .choice-btn span { font-weight: bold; color: var(--accent-green); margin-bottom: 0.5rem; font-size: 1.1rem; }
-        #question-navigation-container { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+        #question-navigation-container { display: flex; justify-content: flex-end; align-items: center; margin-top: 1rem; }
         #finish-btn { display: none; }
+        #prev-btn { display: none; }
 
         /* Results Page */
         #global-score-card { text-align: center; padding: 2rem; }
@@ -366,29 +367,35 @@
                 <div class="card" id="welcome-card">
                     <div class="welcome-split-layout">
                         <div class="welcome-left">
-                            <h1>Individual Digital Readiness (IDR) Test</h1>
-                            <p>Selamat datang! Kuesioner ini bertujuan untuk mengukur kesiapan digital individu berdasarkan model IDR. Mohon isi data diri Anda di bawah ini untuk memulai.</p>
-                             <div class="form-group">
-                                <label for="name">Nama Lengkap</label>
-                                <input type="text" id="name" name="name" required>
-                            </div>
-                             <div class="form-group">
-                                <label for="age">Usia</label>
-                                <input type="number" id="age" name="age" min="0" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Jenis Kelamin</label>
-                                <div class="gender-options">
-                                    <input type="radio" id="gender-male" name="gender" value="Laki-laki" required>
-                                    <label for="gender-male">Laki-laki</label>
-                                    
-                                    <input type="radio" id="gender-female" name="gender" value="Perempuan" required>
-                                    <label for="gender-female">Perempuan</label>
-                                </div>
-                            </div>
+                            <h1>Integrated Digital Readiness (IDR) Test</h1>
+                            <p>
+                                Hai, Talenta Indonesia!<br><br>
+                                Kuesioner ini membantu Anda mengeksplorasi kesiapan menghadapi transformasi digital.
+                                Mari kenali seberapa siap Anda beradaptasi, berinovasi, dan tumbuh di era VUCA yang menuntut digitalisasi di segala aspeknya.<br><br>
+                                Isi data diri dan jawablah setiap pernyataan secara jujur sesuai kondisi diri Anda guna mendapatkan gambaran yang bermanfaat untuk pengembangan diri.<br><br>
+                                Selamat mengeksplorasi kesiapan Anda!
+                            </p>
                         </div>
                         <div class="welcome-right">
                            <div>
+                                <div class="form-group">
+                                    <label for="name">Nama Lengkap</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="age">Usia</label>
+                                    <input type="number" id="age" name="age" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Jenis Kelamin</label>
+                                    <div class="gender-options">
+                                        <input type="radio" id="gender-male" name="gender" value="Laki-laki" required>
+                                        <label for="gender-male">Laki-laki</label>
+                                        
+                                        <input type="radio" id="gender-female" name="gender" value="Perempuan" required>
+                                        <label for="gender-female">Perempuan</label>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="position-level">Level Jabatan</label>
                                     <input type="text" id="position-level" name="position-level" placeholder="Contoh: Staff" required>
@@ -745,7 +752,7 @@
             }
 
             function updateNavButtons() {
-                prevBtn.disabled = currentQuestionPage === 0;
+                prevBtn.style.display = 'none'; // Selalu sembunyikan tombol "Sebelumnya"
 
                 const questionsOnCurrentPage = pagesConfig[currentQuestionPage];
                 const allAnsweredOnPage = questionsOnCurrentPage.every(q => answers.hasOwnProperty(q.id));
@@ -813,7 +820,7 @@
 
                 if (allAnsweredOnPage && currentQuestionPage < totalPages - 1) {
                      setTimeout(() => {
-                        nextBtn.click();
+                        if (!nextBtn.disabled) nextBtn.click();
                     }, 500);
                 } else if (!isLastQuestionOnPage) {
                     const currentCard = document.getElementById(`question-${index}`);
@@ -896,11 +903,11 @@
                 
                 const globalScore = (finalElementScores.A1 + finalElementScores.A2 + finalElementScores.A3) / 3;
 
-                let curiosityType = 'Balance';
+                let curiosityType = 'Balanced Type';
                 if (scores['B21'].total > scores['B22'].total) {
-                    curiosityType = 'Interest';
+                    curiosityType = 'Delighted Type';
                 } else if (scores['B22'].total > scores['B21'].total) {
-                    curiosityType = 'Deprivation';
+                    curiosityType = 'Deprived Type';
                 }
 
                 return {
