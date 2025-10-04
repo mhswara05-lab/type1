@@ -282,7 +282,11 @@
         .question-text { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 2rem; }
 
         /* Slider (Type A) */
-        .slider-container { position: relative; }
+        .slider-container { 
+            position: relative; 
+            /* FIX: Menambahkan ruang di sisi slider agar mudah disentuh pada perangkat mobile */
+            padding: 0 12px;
+        }
         .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.75rem; }
         input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: var(--slider-track-color); border-radius: 5px; outline: none; margin: 1rem 0; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; }
