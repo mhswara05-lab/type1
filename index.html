@@ -199,9 +199,8 @@
         #welcome-card { padding: 0; overflow: hidden; }
 
         .welcome-split-layout { display: flex; }
-        .welcome-left, .welcome-right { flex: 1; padding: 3rem; }
+        .welcome-left, .welcome-right { flex: 1; padding: 3rem; display: flex; flex-direction: column; }
         .welcome-left { background-color: var(--container-secondary); text-align: left; }
-        .welcome-right { display: flex; flex-direction: column; }
         .button-container { margin-top: auto; padding-top: 1.5rem; text-align: center; }
 
         @media (max-width: 800px) {
@@ -282,11 +281,7 @@
         .question-text { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 2rem; }
 
         /* Slider (Type A) */
-        .slider-container { 
-            position: relative; 
-            /* FIX: Menambahkan ruang di sisi slider agar mudah disentuh pada perangkat mobile */
-            padding: 0 12px;
-        }
+        .slider-container { position: relative; }
         .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.75rem; }
         input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: var(--slider-track-color); border-radius: 5px; outline: none; margin: 1rem 0; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; }
