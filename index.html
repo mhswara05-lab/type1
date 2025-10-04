@@ -271,6 +271,13 @@
 
         /* Questionnaire Page */
         #instruction-header { position: sticky; top: 1.5rem; z-index: 10; margin-bottom: 2rem; background-color: var(--container-secondary); border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-green); padding: 1.5rem; padding-bottom: 0; text-align: left; overflow: hidden; }
+        @media (max-width: 600px) {
+            #instruction-header {
+                position: static !important;
+                top: auto !important;
+                margin-bottom: 1.2rem;
+            }
+        }
         #instruction-text-container p { margin: 0; padding-bottom: 0.75rem; line-height: 1.7; font-size: 1rem; letter-spacing: 0.2px; }
         #instruction-text-container p:last-child { padding-bottom: 1.5rem; }
         #instruction-text-container strong { color: var(--text-primary); font-weight: 600; }
