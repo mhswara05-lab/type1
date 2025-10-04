@@ -249,13 +249,25 @@
              color: #212529;
         }
 
-        .btn { display: inline-block; padding: 0.8rem 1.8rem; background-color: var(--accent-green); border: 1px solid var(--accent-green); color: #1A1A1A; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: background-color 0.3s, box-shadow 0.3s; text-align: center; width: 100%; }
+        .btn { display: inline-block; padding: 0.8rem 1.8rem; background-color: var(--accent-green); border: 1px solid var(--accent-green); color: #1A1A1A; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: all 0.3s; text-align: center; width: 100%; }
         .btn-outline { background-color: transparent; color: var(--accent-green); margin-top: 1rem; }
         .btn-outline:hover { background-color: var(--glow-color); color: var(--accent-green); }
         .btn:hover, .btn:focus { background-color: var(--accent-green-darker); border-color: var(--accent-green-darker); box-shadow: 0 0 15px var(--glow-color); }
-        .btn:disabled { background-color: var(--slider-track-color); border-color: var(--slider-track-color); color: var(--text-secondary); cursor: not-allowed; opacity: 0.7; }
+        
+        .btn:disabled {
+            background-color: var(--slider-track-color);
+            border-color: var(--slider-track-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
         
         body.light-mode .btn { color: #212529; }
+        body.light-mode .btn:disabled {
+            background-color: #ced4da;
+            border-color: #ced4da;
+        }
+
 
         /* Questionnaire Page */
         #instruction-header { position: sticky; top: 1.5rem; z-index: 10; margin-bottom: 2rem; background-color: var(--container-secondary); border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-green); padding: 1.5rem; padding-bottom: 0; text-align: left; overflow: hidden; }
@@ -265,14 +277,13 @@
         #progress-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: var(--slider-track-color); }
         #progress-bar-fill { width: 0%; height: 100%; background-color: var(--accent-green); transition: width 0.3s ease-out; }
         #questionnaire-layout { display: block; }
-        .question-card { margin-bottom: 2rem; padding: 2rem; border-left: 4px solid transparent; transition: border-left-color 0.3s; background-color: var(--container-primary); }
+        .question-card { margin-bottom: 2rem; padding: 2rem; border-left: 4px solid transparent; transition: border-left-color 0.3s; background-color: var(--container-primary); scroll-margin-top: 200px; }
         .question-card.answered-card { border-left-color: var(--accent-green); }
         .question-text { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 2rem; }
 
         /* Slider (Type A) */
         .slider-container { position: relative; }
         .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.75rem; }
-        .slider-label-step { flex: 1; text-align: center; font-size: 0.75rem; line-height: 1.2; padding: 0 2px; }
         input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: var(--slider-track-color); border-radius: 5px; outline: none; margin: 1rem 0; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; }
         input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; border: none; transition: box-shadow 0.2s; }
@@ -736,17 +747,21 @@
             function updateNavButtons() {
                 prevBtn.disabled = currentQuestionPage === 0;
 
-                const answeredCount = Object.keys(answers).length;
-                if (currentQuestionPage === totalPages - 1) {
+                const questionsOnCurrentPage = pagesConfig[currentQuestionPage];
+                const allAnsweredOnPage = questionsOnCurrentPage.every(q => answers.hasOwnProperty(q.id));
+
+                if (currentQuestionPage < totalPages - 1) {
+                    nextBtn.style.display = 'inline-block';
+                    nextBtn.disabled = !allAnsweredOnPage;
+                    finishBtn.style.display = 'none';
+                } else { // Last page
                     nextBtn.style.display = 'none';
-                    if (answeredCount === questions.length) {
+                    const allQuestionsAnswered = Object.keys(answers).length === questions.length;
+                    if (allQuestionsAnswered) {
                         finishBtn.style.display = 'inline-block';
                     } else {
                         finishBtn.style.display = 'none';
                     }
-                } else {
-                    nextBtn.style.display = 'inline-block';
-                    finishBtn.style.display = 'none';
                 }
             }
 
@@ -779,6 +794,7 @@
             function handleAnswer(questionId, value, index) {
                 answers[questionId] = value;
                 updateProgress();
+                updateNavButtons();
 
                 const questionCard = document.getElementById(`question-${index}`);
                 questionCard.classList.add('answered-card');
@@ -791,17 +807,19 @@
                     questionCard.style.borderLeftColor = 'var(--accent-green)';
                 }
 
-                checkAndAutoNext();
-            }
-
-            function checkAndAutoNext() {
+                // Auto-scroll to next question on the same page
                 const questionsOnCurrentPage = pagesConfig[currentQuestionPage];
-                const allAnsweredOnPage = questionsOnCurrentPage.every(q => answers.hasOwnProperty(q.id));
-
-                if (allAnsweredOnPage && currentQuestionPage < totalPages - 1) {
-                    setTimeout(() => {
-                        nextBtn.click();
-                    }, 500); // Penundaan 500ms untuk UX
+                const currentIndexOnPage = questionsOnCurrentPage.findIndex(q => q.id === questionId);
+                
+                if (currentIndexOnPage < questionsOnCurrentPage.length - 1) {
+                    const nextQuestionId = questionsOnCurrentPage[currentIndexOnPage + 1].id;
+                    const nextOriginalIndex = questions.findIndex(q => q.id === nextQuestionId);
+                    const nextQuestionEl = document.getElementById(`question-${nextOriginalIndex}`);
+                    if (nextQuestionEl) {
+                        setTimeout(() => {
+                           nextQuestionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 200);
+                    }
                 }
             }
 
@@ -1186,5 +1204,4 @@
     </script>
 </body>
 </html>
-
 
