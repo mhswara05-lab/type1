@@ -286,7 +286,25 @@
         .slider-labels { display: flex; justify-content: space-between; font-size: 1rem; margin-top: 1rem; }
         input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 18px; background: var(--slider-track-color); border-radius: 8px; outline: none; margin: 1.5rem 0; cursor: pointer; touch-action: pan-x; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 40px; height: 40px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        input[type="range"].min-thumb::-webkit-slider-thumb {
+            background: var(--accent-green);
+            color: #1A1A1A;
+            border: 2px solid var(--accent-green-darker);
+            width: 56px;
+            height: 56px;
+            font-weight: bold;
+            box-shadow: 0 0 0 8px var(--glow-color);
+        }
         input[type="range"]::-moz-range-thumb { width: 40px; height: 40px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; border: none; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        input[type="range"].min-thumb::-moz-range-thumb {
+            background: var(--accent-green);
+            color: #1A1A1A;
+            border: 2px solid var(--accent-green-darker);
+            width: 56px;
+            height: 56px;
+            font-weight: bold;
+            box-shadow: 0 0 0 8px var(--glow-color);
+        }
         input[type="range"]:active::-webkit-slider-thumb, input[type="range"]:focus::-webkit-slider-thumb { box-shadow: 0 0 0 8px var(--glow-color); }
         input[type="range"]:active::-moz-range-thumb, input[type="range"]:focus::-moz-range-thumb { box-shadow: 0 0 0 8px var(--glow-color); }
         .slider-value-popup { position: absolute; top: -45px; transform: translateX(-50%); background-color: var(--accent-green); color: #1A1A1A; padding: 8px 16px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 2; }
@@ -691,7 +709,7 @@
                                 <div class="slider-value-popup">${sliderLabelsText[value]}</div>
                                 <input type="range" id="q_${q.id}" data-question-id="${q.id}" data-index="${originalIndex}" min="1" max="6" value="${value}" step="1">
                                 <div class="slider-labels">
-                                    <span>Sangat Tidak Sesuai</span>
+                                    <span class="slider-label-min" data-slider-id="q_${q.id}">Sangat Tidak Sesuai</span>
                                     <span>Sangat Sesuai</span>
                                 </div>
                             </div>`;
@@ -720,6 +738,51 @@
 
 
             function addQuestionEventListeners() {
+                // Slider thumb jadi tombol jika value 1
+                document.querySelectorAll('input[type="range"]').forEach(slider => {
+                    function updateThumbClass() {
+                        if (slider.value == "1") {
+                            slider.classList.add('min-thumb');
+                        } else {
+                            slider.classList.remove('min-thumb');
+                        }
+                    }
+                    updateThumbClass();
+                    slider.addEventListener('input', updateThumbClass);
+                    slider.addEventListener('change', updateThumbClass);
+                    // Tap pada thumb di posisi 1 tetap memicu jawaban
+                    slider.addEventListener('touchstart', (e) => {
+                        if (slider.value == "1") {
+                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                        }
+                    });
+                });
+                // Event untuk tombol khusus memilih nilai minimum
+                document.querySelectorAll('.btn-pilih-min').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const sliderId = e.target.getAttribute('data-slider-id');
+                        const slider = document.getElementById(sliderId);
+                        if (slider) {
+                            slider.value = 1;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                        }
+                    });
+                });
+                // Event untuk label minimum agar bisa memilih nilai 1 langsung
+                document.querySelectorAll('.slider-label-min').forEach(label => {
+                    function setSliderMin(e) {
+                        const sliderId = e.target.getAttribute('data-slider-id');
+                        const slider = document.getElementById(sliderId);
+                        if (slider) {
+                            slider.value = 1;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                        }
+                    }
+                    label.addEventListener('click', setSliderMin);
+                    label.addEventListener('touchstart', setSliderMin);
+                });
                 document.querySelectorAll('input[type="range"]').forEach(slider => {
                     updateSliderAppearance(slider);
                     // Set jawaban setiap kali slider digeser (termasuk ke nilai 1)
