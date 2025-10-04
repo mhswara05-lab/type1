@@ -722,7 +722,11 @@
             function addQuestionEventListeners() {
                 document.querySelectorAll('input[type="range"]').forEach(slider => {
                     updateSliderAppearance(slider);
-                    slider.addEventListener('input', () => updateSliderAppearance(slider));
+                    // Set jawaban setiap kali slider digeser (termasuk ke nilai 1)
+                    slider.addEventListener('input', (e) => {
+                        updateSliderAppearance(slider);
+                        handleAnswer(e.target.dataset.questionId, e.target.value, parseInt(e.target.dataset.index));
+                    });
                     slider.addEventListener('change', (e) => handleAnswer(e.target.dataset.questionId, e.target.value, parseInt(e.target.dataset.index)));
                     slider.addEventListener('mousedown', (e) => e.target.previousElementSibling.style.opacity = '1');
                     slider.addEventListener('touchstart', (e) => e.target.previousElementSibling.style.opacity = '1');
@@ -734,16 +738,12 @@
                         const rect = sliderEl.getBoundingClientRect();
                         const clickX = e.clientX - rect.left;
                         const percent = clickX / rect.width;
-                        
                         const min = parseFloat(sliderEl.min);
                         const max = parseFloat(sliderEl.max);
                         const range = max - min;
-                        
                         const rawValue = (percent * range) + min;
                         const newValue = Math.round(rawValue);
-
                         sliderEl.value = Math.max(min, Math.min(max, newValue));
-
                         sliderEl.dispatchEvent(new Event('input', { bubbles: true }));
                         sliderEl.dispatchEvent(new Event('change', { bubbles: true }));
                     });
@@ -1045,7 +1045,7 @@
                             <div class="element-summary">
                                  <div class="element-info">
                                     <h3>${elementDetails[elId].name}</h3>
-                                    <p class="element-interpretation">${getInterpretation(elementScore)}</p>
+                                    <p class="element-interpretation">${getInterpretation(elementScore)}</p>    
                                  </div>
                                 <div class="progress-circle element-circle" data-score="${elementScore}">
                                     <svg viewBox="0 0 100 100">
