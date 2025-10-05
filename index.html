@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="id">
     <head>
     <style>
@@ -533,7 +533,7 @@
                 // =================================================================================
                 // DATA & KONFIGURASI
                 // =================================================================================
-                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwd7x4XfxGSQYLELAgo0j3hPLZpsAD0X_5l4cFKqSQB8Zy0Uad-1kYFryzCvA-vrp-R/exec';
+                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWEG0YkJWbm7E5MHRYzZDhYHj8EPrjBj7nbjKpnbjP7R1eoRi4APL2uwvSmiPlXJHs/exec';
 
                 const questions = [
                     // Digital Perspective (A1)
@@ -1336,7 +1336,7 @@
 
                 async function sendDataToSheet(results) {
                                         // Versi paling sederhana: kirim semua data sebagai FormData tanpa urutan khusus
-                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwd7x4XfxGSQYLELAgo0j3hPLZpsAD0X_5l4cFKqSQB8Zy0Uad-1kYFryzCvA-vrp-R/exec';
+                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWEG0YkJWbm7E5MHRYzZDhYHj8EPrjBj7nbjKpnbjP7R1eoRi4APL2uwvSmiPlXJHs/exec';
                     const dataToSend = new FormData();
                     dataToSend.append('timestamp', new Date().toISOString());
                     Object.entries(userData).forEach(([key, value]) => dataToSend.append(key, value));
