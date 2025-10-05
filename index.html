@@ -520,8 +520,8 @@
                 // =================================================================================
                 // DATA & KONFIGURASI
                 // =================================================================================
-                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6qFVRwL7zwxgbBTTccgsSxU1XkqydhoCWa0WDMTSk7Bosrh-oM7GIy1znrbx7mPvX/exec';
-            
+                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzihUifv_m-68R2AT87tzIcY8ftwE8-0ULOe99MALiI4OijRkJlVO4jNGGiZt9WriQU/exec';
+           
                 const questions = [
                     // Digital Perspective (A1)
                     { id: "A11_1", element: "A1", dimension: "A11", type: "A", text: "Saya percaya bahwa teknologi digital adalah penunjang utama pekerjaan saya saat ini" },
@@ -1358,16 +1358,30 @@
                     dataToSend.global_score = results.globalScore.toFixed(2);
 
                     try {
-                        await fetch(GOOGLE_SCRIPT_URL, {
+                        // Kirim data ke Google Sheet
+                        const sheetResponse = await fetch(GOOGLE_SCRIPT_URL, {
+                            method: 'POST',
+                            body: JSON.stringify(dataToSend)
+                        });
+
+                        // Kirim data ke database MySQL melalui PHP
+                        const mysqlResponse = await fetch('https://pengukuranpsikologis.com/public/idr/submit.php', {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json',
+                                'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(dataToSend),
+                            body: JSON.stringify(dataToSend)
                         });
-                        console.log('Data successfully sent to Google Sheet (JSON).');
+                        const mysqlResult = await mysqlResponse.json();
+                        
+                        console.log('Sheet Response:', await sheetResponse.text());
+                        console.log('MySQL Response:', mysqlResult);
+                        
+                        if (mysqlResult.status === 'error') {
+                            console.error('MySQL Error:', mysqlResult.message);
+                        }
                     } catch (error) {
-                        console.error('Error sending data to Google Sheet:', error);
+                        console.error('Error sending data:', error);
                     }
                 }
                 
