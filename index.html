@@ -1323,15 +1323,43 @@
 
             async function sendDataToSheet(results) {
                 const dataToSend = new FormData();
+                // 1. Timestamp
                 dataToSend.append('timestamp', new Date().toISOString());
-                Object.entries(userData).forEach(([key, value]) => dataToSend.append(key, value));
-                Object.entries(answers).forEach(([key, value]) => dataToSend.append(key, value));
-                dataToSend.append('global_score', results.globalScore.toFixed(2));
+                // 2. Data Diri (urut: name, age, gender, position-level, job, industry)
+                dataToSend.append('name', userData.name || '');
+                dataToSend.append('age', userData.age || '');
+                dataToSend.append('gender', userData.gender || '');
+                dataToSend.append('position-level', userData['position-level'] || '');
+                dataToSend.append('job', userData.job || '');
+                dataToSend.append('industry', userData.industry || '');
+
+                // 3. Jawaban A1, A2, A3 (urut pertanyaan)
+                const partA = questions.filter(q => q.element === 'A1' || q.element === 'A2' || q.element === 'A3');
+                partA.forEach(q => {
+                    dataToSend.append(q.id, answers[q.id] || '');
+                });
+
+                // 4. Jawaban B1 (urut pertanyaan)
+                const partB1 = questions.filter(q => q.element === 'B1');
+                partB1.forEach(q => {
+                    dataToSend.append(q.id, answers[q.id] || '');
+                });
+
+                // 5. Jawaban B2 (urut pertanyaan)
+                const partB2 = questions.filter(q => q.element === 'B2');
+                partB2.forEach(q => {
+                    dataToSend.append(q.id, answers[q.id] || '');
+                });
+
+                // 6. Skor Dimensi (urut dimensi)
                 Object.keys(dimensionDetails).forEach(dimId => {
                     if(results.dimensionScores[dimId]){
                         dataToSend.append(`score_${dimId}`, results.dimensionScores[dimId].normalized.toFixed(2));
                     }
                 });
+
+                // 7. Skor Global
+                dataToSend.append('global_score', results.globalScore.toFixed(2));
 
                 try {
                     await fetch(GOOGLE_SCRIPT_URL, {
