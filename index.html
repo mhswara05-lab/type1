@@ -1322,51 +1322,50 @@
             }
 
             async function sendDataToSheet(results) {
-                const dataToSend = new FormData();
-                // 1. Timestamp
-                dataToSend.append('timestamp', new Date().toISOString());
-                // 2. Data Diri (urut: name, age, gender, position-level, job, industry)
-                dataToSend.append('name', userData.name || '');
-                dataToSend.append('age', userData.age || '');
-                dataToSend.append('gender', userData.gender || '');
-                dataToSend.append('position-level', userData['position-level'] || '');
-                dataToSend.append('job', userData.job || '');
-                dataToSend.append('industry', userData.industry || '');
+                // Buat objek data sesuai urutan field yang diinginkan
+                const dataToSend = {
+                    timestamp: new Date().toISOString(),
+                    name: userData.name || '',
+                    age: userData.age || '',
+                    gender: userData.gender || '',
+                    position_level: userData['position-level'] || '',
+                    job: userData.job || '',
+                    industry: userData.industry || '',
+                };
 
-                // 3. Jawaban A1, A2, A3 (urut pertanyaan)
+                // Jawaban A1, A2, A3
                 const partA = questions.filter(q => q.element === 'A1' || q.element === 'A2' || q.element === 'A3');
                 partA.forEach(q => {
-                    dataToSend.append(q.id, answers[q.id] || '');
+                    dataToSend[q.id] = answers[q.id] || '';
                 });
-
-                // 4. Jawaban B1 (urut pertanyaan)
+                // Jawaban B1
                 const partB1 = questions.filter(q => q.element === 'B1');
                 partB1.forEach(q => {
-                    dataToSend.append(q.id, answers[q.id] || '');
+                    dataToSend[q.id] = answers[q.id] || '';
                 });
-
-                // 5. Jawaban B2 (urut pertanyaan)
+                // Jawaban B2
                 const partB2 = questions.filter(q => q.element === 'B2');
                 partB2.forEach(q => {
-                    dataToSend.append(q.id, answers[q.id] || '');
+                    dataToSend[q.id] = answers[q.id] || '';
                 });
-
-                // 6. Skor Dimensi (urut dimensi)
+                // Skor Dimensi
                 Object.keys(dimensionDetails).forEach(dimId => {
                     if(results.dimensionScores[dimId]){
-                        dataToSend.append(`score_${dimId}`, results.dimensionScores[dimId].normalized.toFixed(2));
+                        dataToSend[`score_${dimId}`] = results.dimensionScores[dimId].normalized.toFixed(2);
                     }
                 });
-
-                // 7. Skor Global
-                dataToSend.append('global_score', results.globalScore.toFixed(2));
+                // Skor Global
+                dataToSend.global_score = results.globalScore.toFixed(2);
 
                 try {
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
-                        body: dataToSend,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(dataToSend),
                     });
-                    console.log('Data successfully sent to Google Sheet.');
+                    console.log('Data successfully sent to Google Sheet (JSON).');
                 } catch (error) {
                     console.error('Error sending data to Google Sheet:', error);
                 }
