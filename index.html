@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<style>
+    .progress-bar-page-indicator {
+        color: #fff;
+        transition: color 0.2s;
+    }
+    body.light-mode .progress-bar-page-indicator {
+        color: #222 !important;
+    }
+    body:not(.light-mode) .progress-bar-page-indicator {
+        color: #fff !important;
+    }
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integrated Digital Readiness (IDR) Test</title>
@@ -508,7 +520,7 @@
             // =================================================================================
             // DATA & KONFIGURASI
             // =================================================================================
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwR_sC5eG8YtFw2LqZ3sXv8JkKjN7pDqA9hXcVbN0rL5iYtUoI6E7Wp/exec';
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxagmemLV5KkURHpBpU1qPIL-I6kyBf1ofCsuH43y5vfrY4VsW_zgDhCH3M6yVcBm9Oxg/exec';
 
              const questions = [
                 // Digital Perspective (A1)
@@ -676,17 +688,122 @@
                 questionsContainer.innerHTML = '';
                 const questionsToRender = pagesConfig[currentQuestionPage];
 
-                const firstQuestionType = questionsToRender[0].type;
-                if (firstQuestionType === 'A') {
+                // Indikator halaman di dalam progres bar
+                const progressBarContainer = document.getElementById('progress-bar');
+                if (progressBarContainer) {
+                    // Hapus konten lama
+                    progressBarContainer.innerHTML = '';
+                    // Bar progres
+                    const progressBarFillCustom = document.createElement('div');
+                    progressBarFillCustom.id = 'progress-bar-fill-custom';
+                    progressBarFillCustom.style.height = '100%';
+                    progressBarFillCustom.style.width = '0%';
+                    progressBarFillCustom.style.background = 'var(--accent-green)';
+                    progressBarFillCustom.style.borderRadius = '8px';
+                    progressBarFillCustom.style.transition = 'width 0.3s';
+                    progressBarFillCustom.style.position = 'absolute';
+                    progressBarFillCustom.style.left = '0';
+                    progressBarFillCustom.style.top = '0';
+                    progressBarFillCustom.style.zIndex = '1';
+                    progressBarContainer.appendChild(progressBarFillCustom);
+
+                    // Indikator halaman di atas progres bar
+                    const pageIndicator = document.createElement('div');
+                    pageIndicator.style.position = 'absolute';
+                    pageIndicator.style.left = '0';
+                    pageIndicator.style.top = '0';
+                    pageIndicator.style.width = '100%';
+                    pageIndicator.style.height = '100%';
+                    pageIndicator.style.display = 'flex';
+                    pageIndicator.style.alignItems = 'center';
+                    pageIndicator.style.justifyContent = 'center';
+                    pageIndicator.style.fontWeight = 'bold';
+                    pageIndicator.style.fontSize = '1em';
+                    pageIndicator.style.zIndex = '2';
+                    pageIndicator.style.pointerEvents = 'none';
+                    // Ganti warna teks sesuai mode
+                    pageIndicator.classList.add('progress-bar-page-indicator');
+                    // Simpan referensi indikator untuk update warna saat tema berubah
+                    progressBarContainer._pageIndicator = pageIndicator;
+                    pageIndicator.textContent = `Halaman ${currentQuestionPage + 1} dari ${totalPages}`;
+                    progressBarContainer.appendChild(pageIndicator);
+
+                    // Pastikan progres bar tidak menutupi instruksi
+                    progressBarContainer.style.position = 'relative';
+                    progressBarContainer.style.margin = '1.2em 0 2em 0';
+                }
+
+                // Instruksi rapi (kotak instruksi saja)
+                if (questionsToRender[0].type === 'A') {
                     instructionTextContainer.innerHTML = `
-                        <p><strong>Bacalah</strong> setiap pernyataan dan <strong>geser slider</strong> yang sesuai untuk menggambarkan diri Anda.</p>
-                        <p>Jawablah dengan <strong>jujur</strong> sesuai kondisi yang Anda alami karena tidak ada jawaban <strong>BENAR</strong> maupun <strong>SALAH</strong>.</p>
+                        <div style="padding:0.5em 0 1.2em 0;">
+                            <div style="font-weight:bold;font-size:1.1em;margin-bottom:0.5em;color:var(--accent-green-darker);">Instruksi Tes</div>
+                            <div style="margin-bottom:0.7em;line-height:1.7;color:var(--text-primary);">Bacalah setiap pernyataan dengan tenang, lalu bayangkan kondisi Anda saat ini.<br>Geser slider ke posisi yang paling menggambarkan diri Anda.<br>Tidak ada jawaban benar atau salah, maka jawablah sejujur-jujurnya.</div>
+                            <div style="margin-bottom:0.5em;font-weight:500;color:var(--accent-green-darker);">Pilihan respon:</div>
+                            <div style="display:flex;justify-content:space-between;font-size:0.98em;color:var(--text-secondary);gap:0.5em;">
+                                <div>1 = Sangat Tidak Sesuai</div>
+                                <div>2 = Tidak Sesuai</div>
+                                <div>3 = Agak Tidak Sesuai</div>
+                                <div>4 = Cukup Sesuai</div>
+                                <div>5 = Sesuai</div>
+                                <div>6 = Sangat Sesuai</div>
+                            </div>
+                        </div>
                     `;
-                } else { // Type B
+                } else {
                     instructionTextContainer.innerHTML = `
-                        <p><strong>Bacalah</strong> setiap pernyataan dan <strong>pilihlah</strong> yang paling sesuai untuk menggambarkan diri Anda.</p>
-                        <p>Jawablah dengan <strong>jujur</strong> sesuai kondisi yang Anda alami karena tidak ada jawaban <strong>BENAR</strong> maupun <strong>SALAH</strong>.</p>
+                        <div style="padding:0.5em 0 1.2em 0;">
+                            <div style="font-weight:bold;font-size:1.1em;margin-bottom:0.5em;color:var(--accent-green-darker);">Instruksi Tes</div>
+                            <div style="margin-bottom:0.7em;line-height:1.7;color:var(--text-primary);">Bacalah setiap pernyataan dengan tenang, lalu bayangkan kondisi Anda saat ini.<br>Pilihlah pernyataan yang paling menggambarkan diri Anda.<br>Tidak ada jawaban benar atau salah, maka jawablah sejujur-jujurnya.</div>
+                        </div>
                     `;
+                }
+                // Bar progres dipisah, di bawah kotak instruksi dan diperbesar
+                // Deklarasi progressBarContainer hanya satu kali di awal fungsi
+                // ...existing code...
+                // Di bagian atas fungsi renderQuestions, tambahkan:
+                // const progressBarContainer = document.getElementById('progress-bar');
+                // ...existing code...
+                if (progressBarContainer) {
+                    progressBarContainer.style.display = 'block';
+                    progressBarContainer.style.height = '16px'; // Perbesar tinggi progres bar
+                    progressBarContainer.style.background = 'var(--slider-track-color)';
+                    progressBarContainer.style.borderRadius = '8px';
+                    progressBarContainer.style.position = 'relative';
+                    progressBarContainer.style.margin = '1.2em 0 2em 0';
+                    // Hapus konten lama
+                    progressBarContainer.innerHTML = '';
+                    // Bar progres
+                    const progressBarFillCustom = document.createElement('div');
+                    progressBarFillCustom.id = 'progress-bar-fill-custom';
+                    progressBarFillCustom.style.height = '100%';
+                    progressBarFillCustom.style.width = '0%';
+                    progressBarFillCustom.style.background = 'var(--accent-green)';
+                    progressBarFillCustom.style.borderRadius = '8px';
+                    progressBarFillCustom.style.transition = 'width 0.3s';
+                    progressBarFillCustom.style.position = 'absolute';
+                    progressBarFillCustom.style.left = '0';
+                    progressBarFillCustom.style.top = '0';
+                    progressBarFillCustom.style.zIndex = '1';
+                    progressBarContainer.appendChild(progressBarFillCustom);
+
+                    // Indikator halaman di atas progres bar
+                    const pageIndicator = document.createElement('div');
+                    pageIndicator.style.position = 'absolute';
+                    pageIndicator.style.left = '0';
+                    pageIndicator.style.top = '0';
+                    pageIndicator.style.width = '100%';
+                    pageIndicator.style.height = '100%';
+                    pageIndicator.style.display = 'flex';
+                    pageIndicator.style.alignItems = 'center';
+                    pageIndicator.style.justifyContent = 'center';
+                    pageIndicator.style.fontWeight = 'bold';
+                    pageIndicator.style.fontSize = '1em';
+                    pageIndicator.style.zIndex = '2';
+                    pageIndicator.style.pointerEvents = 'none';
+                    pageIndicator.style.color = '#fff'; // Warna kontras
+                    pageIndicator.textContent = `Halaman ${currentQuestionPage + 1} dari ${totalPages}`;
+                    progressBarContainer.appendChild(pageIndicator);
                 }
 
                 questionsToRender.forEach(q => {
@@ -712,12 +829,18 @@
                         const value = answers[q.id] || 1;
                         questionHTML += `
                             <p class="question-text">${q.text}</p>
-                            <div class="slider-container">
+                            <div class="slider-container" style="position:relative;padding-bottom:40px;">
                                 <div class="slider-value-popup">${sliderLabelsText[value]}</div>
-                                <input type="range" id="q_${q.id}" data-question-id="${q.id}" data-index="${originalIndex}" min="1" max="6" value="${value}" step="1">
-                                <div class="slider-labels">
-                                    <span class="slider-label-min" data-slider-id="q_${q.id}">Sangat Tidak Sesuai</span>
-                                    <span>Sangat Sesuai</span>
+                                <input type="range" id="q_${q.id}" data-question-id="${q.id}" data-index="${originalIndex}" min="1" max="6" value="${value}" step="1" style="width:100%;margin-bottom:32px;">
+                                <div class="slider-slicing" style="position:absolute;left:0;right:0;top:32px;height:8px;width:100%;pointer-events:none;">
+                                    ${[1,2,3,4,5].map(i => `
+                                        <div style="position:absolute;left:${(i/6)*100}%;top:0;height:8px;width:2px;background:#adb5bd;"></div>
+                                    `).join('')}
+                                </div>
+                                <div class="slider-labels" style="display:flex;justify-content:space-between;position:absolute;left:0;right:0;top:64px;width:100%;">
+                                    ${[1,2,3,4,5,6].map(i => `
+                                        <span style="font-size:0.85rem;color:${value==i?'var(--accent-green-darker)':'#6c757d'};font-weight:${value==i?'bold':'normal'};width:16%;text-align:center;">${sliderLabelsText[i]}</span>
+                                    `).join('')}
                                 </div>
                             </div>`;
                     } else if (q.type === 'B') {
@@ -745,6 +868,29 @@
 
 
             function addQuestionEventListeners() {
+                // Event untuk bulatan slider agar bisa dipilih langsung
+                document.querySelectorAll('.slider-step-dot').forEach(dot => {
+                    dot.addEventListener('click', (e) => {
+                        const sliderId = e.target.getAttribute('data-slider-id');
+                        const step = e.target.getAttribute('data-step');
+                        const slider = document.getElementById(sliderId);
+                        if (slider) {
+                            slider.value = step;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                        }
+                    });
+                    dot.addEventListener('touchstart', (e) => {
+                        const sliderId = e.target.getAttribute('data-slider-id');
+                        const step = e.target.getAttribute('data-step');
+                        const slider = document.getElementById(sliderId);
+                        if (slider) {
+                            slider.value = step;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                        }
+                    });
+                });
                 // Slider thumb jadi tombol jika value 1
                 document.querySelectorAll('input[type="range"]').forEach(slider => {
                     function updateThumbClass() {
@@ -919,6 +1065,8 @@
                 const percentage = (answeredCount / totalQuestions) * 100;
                 
                 progressBarFill.style.width = `${percentage}%`;
+                const customBar = document.getElementById('progress-bar-fill-custom');
+                if (customBar) customBar.style.width = `${percentage}%`;
                 
                 if (answeredCount === totalQuestions) {
                     updateNavButtons();
@@ -1258,6 +1406,7 @@
                     document.body.classList.remove('light-mode');
                 }
                 localStorage.setItem('theme', theme);
+                // Tidak perlu update warna indikator secara manual, cukup dengan CSS
             }
 
             themeToggle.addEventListener('click', () => {
