@@ -533,7 +533,7 @@
                 // =================================================================================
                 // DATA & KONFIGURASI
                 // =================================================================================
-                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWEG0YkJWbm7E5MHRYzZDhYHj8EPrjBj7nbjKpnbjP7R1eoRi4APL2uwvSmiPlXJHs/exec';
+                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6qFVRwL7zwxgbBTTccgsSxU1XkqydhoCWa0WDMTSk7Bosrh-oM7GIy1znrbx7mPvX/exec';
 
                 const questions = [
                     // Digital Perspective (A1)
@@ -1336,7 +1336,7 @@
 
                 async function sendDataToSheet(results) {
                                         // Versi paling sederhana: kirim semua data sebagai FormData tanpa urutan khusus
-                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWEG0YkJWbm7E5MHRYzZDhYHj8EPrjBj7nbjKpnbjP7R1eoRi4APL2uwvSmiPlXJHs/exec';
+                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6qFVRwL7zwxgbBTTccgsSxU1XkqydhoCWa0WDMTSk7Bosrh-oM7GIy1znrbx7mPvX/exec';
                     const dataToSend = new FormData();
                     dataToSend.append('timestamp', new Date().toISOString());
                     Object.entries(userData).forEach(([key, value]) => dataToSend.append(key, value));
