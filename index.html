@@ -1337,8 +1337,9 @@
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
                         body: dataToSend,
+                        mode: 'no-cors', // Tambahkan mode ini untuk bypass CORS
                     });
-                    console.log('Data successfully sent to Google Sheet.');
+                    console.log('Data successfully sent to Google Sheet (no-cors mode).');
                 } catch (error) {
                     console.error('Error sending data to Google Sheet:', error);
                 }
