@@ -79,6 +79,19 @@
                 scroll-behavior: smooth;
             }
 
+            @media (max-width: 600px) {
+                html, body {
+                    font-size: 18px !important;
+                }
+                h1 { font-size: 2rem !important; }
+                h2 { font-size: 1.5rem !important; }
+                h3 { font-size: 1.1rem !important; }
+                h4 { font-size: 1rem !important; }
+                p, label, input, button {
+                    font-size: 1.05rem !important;
+                }
+            }
+
             body {
                 font-family: 'Inter', sans-serif;
                 background-color: var(--bg-body);
@@ -1323,18 +1336,17 @@
 
                 async function sendDataToSheet(results) {
                                         // Versi paling sederhana: kirim semua data sebagai FormData tanpa urutan khusus
-                                        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwd7x4XfxGSQYLELAgo0j3hPLZpsAD0X_5l4cFKqSQB8Zy0Uad-1kYFryzCvA-vrp-R/exec';
-                                        const dataToSend = new FormData();
-                                        dataToSend.append('timestamp', new Date().toISOString());
-                                        Object.entries(userData).forEach(([key, value]) => dataToSend.append(key, value));
-                                        Object.entries(answers).forEach(([key, value]) => dataToSend.append(key, value));
-                                        dataToSend.append('global_score', results.globalScore.toFixed(2));
-                                        Object.keys(dimensionDetails).forEach(dimId => {
-                                                if(results.dimensionScores[dimId]){
-                                                        dataToSend.append(`score_${dimId}`, results.dimensionScores[dimId].normalized.toFixed(2));
-                                                }
-                                        });
+                    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwd7x4XfxGSQYLELAgo0j3hPLZpsAD0X_5l4cFKqSQB8Zy0Uad-1kYFryzCvA-vrp-R/exec';
                     const dataToSend = new FormData();
+                    dataToSend.append('timestamp', new Date().toISOString());
+                    Object.entries(userData).forEach(([key, value]) => dataToSend.append(key, value));
+                    Object.entries(answers).forEach(([key, value]) => dataToSend.append(key, value));
+                    dataToSend.append('global_score', results.globalScore.toFixed(2));
+                    Object.keys(dimensionDetails).forEach(dimId => {
+                        if(results.dimensionScores[dimId]){
+                            dataToSend.append(`score_${dimId}`, results.dimensionScores[dimId].normalized.toFixed(2));
+                        }
+                    });
                     // 1. Timestamp
                     dataToSend.append('timestamp', new Date().toISOString());
                     // 2. Data Diri (urut: name, age, gender, position-level, job, industry)
