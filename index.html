@@ -458,7 +458,7 @@
                            </div>
                            <div class="button-container">
                                 <button type="submit" class="btn">Mulai</button>
-                                <button type="button" id="prototype-btn" class="btn btn-outline">Isi & Jawab Otomatis (Prototipe)</button>
+
                            </div>
                         </div>
                     </div>
@@ -639,7 +639,7 @@
             const nextBtn = document.getElementById('next-btn');
             const finishBtn = document.getElementById('finish-btn');
             const restartBtn = document.getElementById('restart-btn');
-            const prototypeBtn = document.getElementById('prototype-btn');
+
             const instructionTextContainer = document.getElementById('instruction-text-container');
             const elementsContainer = document.getElementById('elements-container');
 
@@ -1408,27 +1408,7 @@
                  window.scrollTo(0, 0);
             }
 
-            function runPrototypeMode() {
-                document.getElementById('name').value = 'User Prototipe';
-                document.getElementById('age').value = Math.floor(Math.random() * 40) + 20;
-                if (Math.random() < 0.5) {
-                    document.getElementById('gender-male').checked = true;
-                } else {
-                    document.getElementById('gender-female').checked = true;
-                }
-                document.getElementById('position-level').value = 'Staff';
-                document.getElementById('job').value = 'Pemasaran';
-                document.getElementById('industry').value = 'Teknologi';
 
-                answers = {};
-                questions.forEach(q => {
-                    if (q.type === 'A') {
-                        answers[q.id] = String(Math.floor(Math.random() * 6) + 1);
-                    } else { 
-                        answers[q.id] = Math.random() < 0.5 ? 'I' : 'D';
-                    }
-                });
-            }
 
 
             // =================================================================================
@@ -1458,7 +1438,7 @@
 
 
             userInfoForm.addEventListener('submit', startQuestionnaire);
-            prototypeBtn.addEventListener('click', runPrototypeMode);
+
 
             prevBtn.addEventListener('click', () => {
                 if (currentQuestionPage > 0) {
@@ -1480,4 +1460,3 @@
     </script>
 </body>
 </html>
-
