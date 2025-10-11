@@ -282,11 +282,9 @@
 
 
         /* Questionnaire Page */
-        #instruction-header { position: sticky; top: 1.5rem; z-index: 10; margin-bottom: 2rem; background-color: var(--container-secondary); border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-green); padding: 1.5rem; padding-bottom: 0; text-align: left; overflow: hidden; }
+        #instruction-header { position: static; margin-bottom: 2rem; background-color: var(--container-secondary); border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-green); padding: 1.5rem; padding-bottom: 0; text-align: left; overflow: hidden; }
         @media (max-width: 600px) {
             #instruction-header {
-                position: static !important;
-                top: auto !important;
                 margin-bottom: 1.2rem;
             }
         }
@@ -528,7 +526,7 @@
                 { id: "A11_2", element: "A1", dimension: "A11", type: "A", text: "Saya percaya penggunaan teknologi digital dapat mengoptimalkan kinerja" },
                 { id: "A11_3", element: "A1", dimension: "A11", type: "A", text: "Saya mampu mengenali teknologi digital mana yang dapat menunjang kinerja" },
                 { id: "A11_4", element: "A1", dimension: "A11", type: "A", text: "Saya bersedia membantu rekan kerja agar lebih familiar dengan teknologi digital yang baru diterapkan" },
-                { id: "A12_1", element: "A1", dimension: "A12", type: "A", text: "Saya tertarik mengikuti perkembangan teknologi digital yang berkaitan dengan pekerjaan" },
+                { id: "A12_1", element: "A1", dimension: "A12", type: "A", text: "Saya tertarik mengikuti perkembangan teknologi digital yang berkaitan dengan pekerjaan saya" },
                 { id: "A12_2", element: "A1", dimension: "A12", type: "A", text: "Saya mendukung perubahan proses kerja ke arah yang lebih modern dan digital" },
                 { id: "A12_3", element: "A1", dimension: "A12", type: "A", text: "Saya meyakini bahwa adopsi teknologi digital dapat mempercepat pertumbuhan karier saya" },
                 { id: "A12_4", element: "A1", dimension: "A12", type: "A", text: "Saya tertarik mencoba teknologi digital baru yang enggan digunakan oleh rekan kerja" },
@@ -538,44 +536,44 @@
                 { id: "A13_4", element: "A1", dimension: "A13", type: "A", text: "Saya memiliki perencanaan jangka panjang untuk meningkatkan keterampilan digital" },
                 // Digital Tasking Competency (A2)
                 { id: "A21_1", element: "A2", dimension: "A21", type: "A", text: "Saya mudah memahami dan mengoperasikan teknologi yang baru diperkenalkan" },
-                { id: "A21_2", element: "A2", dimension: "A21", type: "A", text: "Saya cepat menyelaraskan alur kerja agar sesuai dengan sistem teknologi baru" },
+                { id: "A21_2", element: "A2", dimension: "A21", type: "A", text: "Saya dapat menyelaraskan komunikasi digital untuk mencapai suatu tujuan tertentu" },
                 { id: "A21_3", element: "A2", dimension: "A21", type: "A", text: "Saya mampu memulihkan proses kerja dengan cepat saat terganggu oleh perubahan digital" },
-                { id: "A22_1", element: "A2", dimension: "A22", type: "A", text: "Saya mampu menggunakan berbagai fitur teknologi digital untuk menyelesaikan pekerjaan" },
-                { id: "A22_2", element: "A2", dimension: "A22", type: "A", text: "Saya jarang melakukan kesalahan saat menggunakan teknologi digital untuk bekerja" },
-                { id: "A22_3", element: "A2", dimension: "A22", type: "A", text: "Saya mampu memanfaatkan teknologi digital untuk menghasilkan pekerjaan yang berkualitas" },
-                { id: "A23_1", element: "A2", dimension: "A23", type: "A", text: "Saya mampu menemukan solusi saat menghadapi masalah teknis terkait penggunaan teknologi digital" },
-                { id: "A23_2", element: "A2", dimension: "A23", type: "A", text: "Saya mampu beradaptasi dengan cepat ketika terjadi perubahan teknologi digital" },
-                { id: "A23_3", element: "A2", dimension: "A23", type: "A", text: "Saya dapat mengidentifikasi masalah yang disebabkan oleh perubahan sistem digital di tempat kerja" },
+                { id: "A22_1", element: "A2", dimension: "A22", type: "A", text: "Saya memastikan teknologi digital yang dipilih memberi keuntungan bagi organisasi" },
+                { id: "A22_2", element: "A2", dimension: "A22", type: "A", text: "Saya dapat mengidentifikasi dan memperbaiki kesalahan penggunaan teknologi digital sebelum menimbulkan masalah" },
+                { id: "A22_3", element: "A2", dimension: "A22", type: "A", text: "Saya memastikan teknologi digital yang digunakan benar-benar berkontribusi pada peningkatan kualitas kinerja" },
+                { id: "A23_1", element: "A2", dimension: "A23", type: "A", text: "Saya dapat memahami tujuan dan fungsi teknologi digital yang baru diperkenalkan di tempat kerja" },
+                { id: "A23_2", element: "A2", dimension: "A23", type: "A", text: "Saya menemukan cara untuk mengintegrasikan teknologi digital baru tanpa mengganggu proses kerja yang sudah ada" },
+                { id: "A23_3", element: "A2", dimension: "A23", type: "A", text: "Saya menyesuaikan ritme kerja agar produktivitas tetap terjaga selama proses integrasi teknologi" },
                 // Digital Responsiveness (A3)
                 { id: "A31_1", element: "A3", dimension: "A31", type: "A", text: "Saya mampu membedakan teknologi digital yang hanya akan menjadi tren sesaat dan yang akan berdampak besar pada pekerjaan" },
                 { id: "A31_2", element: "A3", dimension: "A31", type: "A", text: "Saya memetakan proses kerja yang dapat dipercepat dengan adanya perkembangan teknologi digital" },
                 { id: "A31_3", element: "A3", dimension: "A31", type: "A", text: "Saya mampu memprediksi dampak risiko dari suatu perkembangan teknologi terhadap keberlangsungan bisnis" },
                 { id: "A32_1", element: "A3", dimension: "A32", type: "A", text: "Saya mengatur ulang prioritas kerja untuk memberi ruang bagi adaptasi teknologi digital baru" },
-                { id: "A32_2", element: "A3", dimension: "A32", type: "A", text: "Saya memusatkan perhatian pada fitur teknologi digital yang paling relevan dengan pekerjaan" },
+                { id: "A32_2", element: "A3", dimension: "A32", type: "A", text: "Saya bisa melihat potensi baru pada teknologi digital dengan cara terbaik untuk menunjang pekerjaan" },
                 { id: "A32_3", element: "A3", dimension: "A32", type: "A", text: "Saya menyesuaikan strategi kerja lama dengan teknologi digital terbaru agar hasil kerja tetap optimal" },
-                { id: "A32_4", element: "A3", dimension: "A32", type: "A", text: "Saya mempersiapkan tools digital cadangan untuk mengantisipasi gangguan saat digunakan" },
-                { id: "A33_1", element: "A3", dimension: "A33", type: "A", text: "Saya memastikan pekerjaan tetap akurat ketika sistem mengalami penyesuaian sistem digital" },
+                { id: "A32_4", element: "A3", dimension: "A32", type: "A", text: "Saya mempersiapkan tools digital cadangan untuk mengantisipasi gangguan yang digunakan" },
+                { id: "A33_1", element: "A3", dimension: "A33", type: "A", text: "Saya memastikan detail pekerjaan tetap akurat meskipun ada penyesuaian sistem digital" },
                 { id: "A33_2", element: "A3", dimension: "A33", type: "A", text: "Saya mengatur ulang alur kerja agar tetap efisien saat ada penyesuaian sistem digital" },
                 { id: "A33_3", element: "A3", dimension: "A33", type: "A", text: "Saya memanfaatkan fitur teknologi digital yang baru untuk mempercepat proses kerja tanpa menurunkan kualitas" },
                  // GRIT (B1)
                 { id: "B11_1", element: "B1", dimension: "B11", type: "A", text: "Ketika target berubah, saya menyesuaikan rencana tanpa meninggalkan tujuan utama" },
-                { id: "B11_2", element: "B1", dimension: "B11", type: "A", text: "Proyek yang telah mulai biasanya tetap saya selesaikan meskipun ada hal baru yang lebih menarik" },
-                { id: "B11_3", element: "B1", dimension: "B11", type: "A", text: "Saya menjaga kesinambungan tujuan meskipun minat dan prioritas saya berubah" },
+                { id: "B11_2", element: "B1", dimension: "B11", type: "A", text: "Proyek yang saya mulai biasanya tetap saya selesaikan meskipun ada hal baru yang lebih menarik" },
+                { id: "B11_3", element: "B1", dimension: "B11", type: "A", text: "Saya menjaga kesinambungan minat meski tantangan membuatnya terasa monoton" },
                 { id: "B11_4", element: "B1", dimension: "B11", type: "A", text: "Saya cenderung menekuni suatu bidang pekerjaan yang sama dalam jangka waktu yang lama" },
-                { id: "B12_1", element: "B1", dimension: "B12", type: "A", text: "Saya tetap melanjutkan pekerjaan walau hasilnya tidak sesuai harapan" },
+                { id: "B12_1", element: "B1", dimension: "B12", type: "A", text: "Saya tetap melakukan pekerjaan walaupun gagal" },
                 { id: "B12_2", element: "B1", dimension: "B12", type: "A", text: "Saya menyelesaikan pekerjaan sampai tuntas meski harus menanggung beban ekstra" },
-                { id: "B12_3", element: "B1", dimension: "B12", type: "A", text: "Saya mengusahakan hasil terbaik meskipun untuk mendapatkan pekerjaan yang terasa sulit" },
+                { id: "B12_3", element: "B1", dimension: "B12", type: "A", text: "Saya mengusahakan sumber daya tambahan untuk menyelesaikan pekerjaan yang terasa sulit" },
                 // Curiosity (B2)
-                { id: "B2_1", element: "B2", dimension: "B2", type: "B", textI: "Saya senang mempelajari berbagai teknologi digital baru walau tidak ada yang meminta", textD: "Saya terdorong mengeksplorasi teknologi digital secara lebih dalam ketika merasa ada yang kurang jelas" },
-                { id: "B2_2", element: "B2", dimension: "B2", type: "B", textI: "Saya berinisiatif mempelajari dan digital untuk memperluas pengetahuan", textD: "Saya tidak melewatkan info fitur-fitur di teknologi saya bahkan yang paya" },
-                { id: "B2_3", element: "B2", dimension: "B2", type: "B", textI: "Saya merasa antusias saat menemukan inovasi digital yang dapat meningkatkan efisiensi kerja", textD: "Sulit berhenti memikirkan masalah teknis akibat gangguan digital sampai menemukan solusinya" },
-                { id: "B2_4", element: "B2", dimension: "B2", type: "B", textI: "Saya tertarik mencoba teknologi digital yang belum pernah saya gunakan sebelumnya", textD: "Saya senang mencari tahu menahu suatu teknologi digital sebelum mulai menggunakan" },
+                { id: "B2_1", element: "B2", dimension: "B2", type: "B", textI: "Saya senang mempelajari berbagai teknologi digital baru walau tidak ada yang meminta", textD: "Saya terdorong mengeksplorasi teknologi digital baru secara lebih dalam ketika merasa ada yang kurang jelas" },
+                { id: "B2_2", element: "B2", dimension: "B2", type: "B", textI: "Saya mempelajari beragam fitur digital untuk memperluas pengetahuan", textD: "Saya tidak tenang jika ada fitur digital baru belum saya pahami fungsinya" },
+                { id: "B2_3", element: "B2", dimension: "B2", type: "B", textI: "Saya merasa antusias saat menemukan inovasi digital yang dapat meningkatkan efisiensi kerja", textD: "Saya sulit berhenti memikirkan masalah teknis akibat gangguan digital sampai menemukan solusinya" },
+                { id: "B2_4", element: "B2", dimension: "B2", type: "B", textI: "Saya tertarik mempelajari teknologi digital yang belum pernah saya gunakan sebelumnya", textD: "Saya merasa perlu memahami semua fitur teknologi digital agar bisa mahir menggunakan" },
                 { id: "B2_5", element: "B2", dimension: "B2", type: "B", textI: "Saya termotivasi mempelajari inovasi digital demi memperluas wawasan", textD: "Saya termotivasi mempelajari inovasi digital karena tuntutan pekerjaan" },
-                { id: "B2_6", element: "B2", dimension: "B2", type: "B", textI: "Saya suka mencoba fitur-fitur baru pada aplikasi digital untuk menemukan cara kerja yang paling efektif", textD: "Saya mengikuti pelatihan digital untuk menguasai keterampilan yang diperlukan dalam pekerjaan saya" },
+                { id: "B2_6", element: "B2", dimension: "B2", type: "B", textI: "Saya suka mencoba fitur-fitur baru pada aplikasi digital untuk menemukan cara kerja yang paling efektif", textD: "Saya mengikuti perkembangan digital untuk menjaga kesempatan agar eksis dalam pekerjaan saya" },
                 { id: "B2_7", element: "B2", dimension: "B2", type: "B", textI: "Saya mempelajari perkembangan teknologi digital untuk menemukan cara memperbaiki proses kerja", textD: "Saya mempelajari perkembangan teknologi digital untuk memastikan tidak tertinggal" },
-                { id: "B2_8", element: "B2", dimension: "B2", type: "B", textI: "Saya sengaja mencoba berbagai fitur teknologi digital di luar fungsi utamanya", textD: "Saya mengeksplorasi teknologi digital untuk memastikan semua fiturnya dapat digunakan" },
-                { id: "B2_9", element: "B2", dimension: "B2", type: "B", textI: "Saya senang mengeksplorasi berbagai alat digital untuk menemukan fungsi tambahan", textD: "Saya mengotak-atik berbagai alat digital untuk memastikan programnya fungsinya sesuai kebutuhan" },
-                { id: "B2_10", element: "B2", dimension: "B2", type: "B", textI: "Saya mencoba fitur-fitur baru pada aplikasi digital karena meminati pengalamannya", textD: "Saya mempelajari fitur baru pada aplikasi digital sampai saya memahami cara kerjanya secara menyeluruh" },
+                { id: "B2_8", element: "B2", dimension: "B2", type: "B", textI: "Saya tertarik mencoba berbagai fitur teknologi digital di luar fungsi utamanya", textD: "Saya mengeksplorasi teknologi digital untuk memastikan semua fitur nya dapat digunakan" },
+                { id: "B2_9", element: "B2", dimension: "B2", type: "B", textI: "Saya senang mengeksplorasi berbagai alat digital untuk menemukan fungsi tambahan", textD: "Saya mempelajari berbagai alat digital untuk memastikan penggunaan fungsinya sesuai kebutuhan" },
+                { id: "B2_10", element: "B2", dimension: "B2", type: "B", textI: "Saya mencoba fitur-fitur baru pada aplikasi digital karena menikmati pengalamannya", textD: "Saya mempelajari fitur baru pada aplikasi digital sampai saya memahami cara kerjanya secara menyeluruh" },
             ];
 
             const dimensionDetails = {
