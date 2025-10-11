@@ -56,7 +56,9 @@
             --color-score-6: #4D7C0F;
             --color-score-7: #365314;
         }
-
+        .slider-tick {
+                    display: none !important;
+                }
         body.light-mode {
             --bg-body: var(--lm-bg-body);
             --container-primary: var(--lm-container-primary);
@@ -301,8 +303,127 @@
         /* Slider (Type A) */
         .slider-container { position: relative; }
         .slider-labels { display: flex; justify-content: space-between; font-size: 1rem; margin-top: 1rem; }
-        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 18px; background: var(--slider-track-color); border-radius: 8px; outline: none; margin: 1.5rem 0; cursor: pointer; touch-action: pan-x; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 40px; height: 40px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .slider-labels span { 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            padding: 0.4rem 0.2rem; 
+            border-radius: 6px; 
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .slider-labels span:hover { 
+            background-color: var(--glow-color); 
+            color: var(--accent-green); 
+            transform: scale(1.05);
+        }
+        .slider-labels span:active {
+            transform: scale(0.95);
+            background-color: var(--accent-green);
+            color: #1A1A1A;
+        }
+        
+        /* Slider Ticks */
+        .slider-ticks { 
+            z-index: 3; 
+        }
+        .slider-tick { 
+            transition: all 0.2s ease; 
+            cursor: pointer;
+            background: var(--text-primary) !important;
+            opacity: 0.5 !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            z-index: 3;
+        }
+        .slider-tick:hover {
+            background: var(--accent-green) !important;
+            opacity: 1 !important;
+            transform: translateX(-50%) scaleY(1.4) scaleX(1);
+            box-shadow: 0 2px 6px rgba(163, 230, 53, 0.4);
+        }
+        .slider-tick-minor {
+            pointer-events: none;
+            border-radius: 0.5px;
+            background: var(--text-secondary) !important;
+            opacity: 0.3 !important;
+        }
+        
+        /* Dark mode styling */
+        body:not(.light-mode) .slider-tick {
+            background: #ffffff !important;
+            opacity: 0.6 !important;
+            box-shadow: 0 1px 2px rgba(255,255,255,0.1);
+        }
+        
+        body:not(.light-mode) .slider-tick-minor {
+            background: #ffffff !important;
+            opacity: 0.3 !important;
+        }
+        
+        /* Light mode styling */
+        body.light-mode .slider-tick {
+            background: #212529 !important;
+            opacity: 0.6 !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        body.light-mode .slider-tick-minor {
+            background: #212529 !important;
+            opacity: 0.3 !important;
+        }
+        
+        body.light-mode .slider-tick:hover {
+            box-shadow: 0 3px 8px rgba(163, 230, 53, 0.6);
+        }
+        
+        body:not(.light-mode) .slider-tick:hover {
+            box-shadow: 0 3px 8px rgba(163, 230, 53, 0.4);
+        }
+        
+        /* Active/Selected tick styling */
+        .slider-tick.active {
+            background: var(--accent-green) !important;
+            opacity: 1 !important;
+            transform: scaleY(1.3) scaleX(1.1);
+            box-shadow: 0 3px 8px rgba(163, 230, 53, 0.6) !important;
+        }
+        
+        /* Ensure ticks are visible above slider track */
+        .slider-container {
+            position: relative;
+        }
+        
+        /* Responsive ticks for mobile - konsisten dan tidak tumpang tindih */
+        @media (max-width: 600px) {
+            .slider-ticks {
+                top: 2rem !important;
+                height: 28px !important;
+            }
+            .slider-tick {
+                width: 2px !important;
+                height: 16px !important;
+                margin-top: -8px !important;
+                opacity: 0.7 !important;
+            }
+            .slider-tick-minor {
+                height: 10px !important;
+                width: 1px !important;
+                opacity: 0.3 !important;
+            }
+            .slider-tick:hover {
+                transform: translateX(-50%) scaleY(1.3) !important;
+            }
+            .slider-tick.active {
+                transform: translateX(-50%) scaleY(1.4) !important;
+            }
+            .slider-labels span {
+                font-size: 0.9rem !important;
+                padding: 0.6rem 0.1rem !important;
+            }
+        }
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 18px; background: var(--slider-track-color); border-radius: 8px; outline: none; margin: 1.5rem 0; cursor: pointer; touch-action: pan-x; position: relative; z-index: 2; border: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 40px; height: 40px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; z-index: 4; border: none; }
         input[type="range"].min-thumb::-webkit-slider-thumb {
             background: var(--accent-green);
             color: #1A1A1A;
@@ -312,7 +433,9 @@
             font-weight: bold;
             box-shadow: 0 0 0 8px var(--glow-color);
         }
-        input[type="range"]::-moz-range-thumb { width: 40px; height: 40px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; border: none; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        input[type="range"]::-moz-range-thumb { width: 40px; height: 40px; background: var(--thumb-color, var(--accent-green)); cursor: pointer; border-radius: 50%; border: none; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; z-index: 4; -moz-appearance: none; }
+        input[type="range"]::-moz-range-track { background: var(--slider-track-color); height: 18px; border-radius: 8px; border: none; }
+        input[type="range"]::-moz-range-progress { background: transparent; height: 18px; border-radius: 8px; border: none; }
         input[type="range"].min-thumb::-moz-range-thumb {
             background: var(--accent-green);
             color: #1A1A1A;
@@ -536,7 +659,7 @@
                 { id: "A13_4", element: "A1", dimension: "A13", type: "A", text: "Saya memiliki perencanaan jangka panjang untuk meningkatkan keterampilan digital" },
                 // Digital Tasking Competency (A2)
                 { id: "A21_1", element: "A2", dimension: "A21", type: "A", text: "Saya mudah memahami dan mengoperasikan teknologi yang baru diperkenalkan" },
-                { id: "A21_2", element: "A2", dimension: "A21", type: "A", text: "Saya dapat menyelaraskan komunikasi digital untuk mencapai suatu tujuan tertentu" },
+                { id: "A21_2", element: "A2", dimension: "A21", type: "A", text: "Saya cepat menyelaraskan alur kerja agar sesuai dengan sistem teknologi baru" },
                 { id: "A21_3", element: "A2", dimension: "A21", type: "A", text: "Saya mampu memulihkan proses kerja dengan cepat saat terganggu oleh perubahan digital" },
                 { id: "A22_1", element: "A2", dimension: "A22", type: "A", text: "Saya memastikan teknologi digital yang dipilih memberi keuntungan bagi organisasi" },
                 { id: "A22_2", element: "A2", dimension: "A22", type: "A", text: "Saya dapat mengidentifikasi dan memperbaiki kesalahan penggunaan teknologi digital sebelum menimbulkan masalah" },
@@ -549,9 +672,9 @@
                 { id: "A31_2", element: "A3", dimension: "A31", type: "A", text: "Saya memetakan proses kerja yang dapat dipercepat dengan adanya perkembangan teknologi digital" },
                 { id: "A31_3", element: "A3", dimension: "A31", type: "A", text: "Saya mampu memprediksi dampak risiko dari suatu perkembangan teknologi terhadap keberlangsungan bisnis" },
                 { id: "A32_1", element: "A3", dimension: "A32", type: "A", text: "Saya mengatur ulang prioritas kerja untuk memberi ruang bagi adaptasi teknologi digital baru" },
-                { id: "A32_2", element: "A3", dimension: "A32", type: "A", text: "Saya bisa melihat potensi baru pada teknologi digital dengan cara terbaik untuk menunjang pekerjaan" },
+                { id: "A32_2", element: "A3", dimension: "A32", type: "A", text: "Saya memusatkan perhatian pada fitur teknologi digital yang paling relevan dengan pekerjaan" },
                 { id: "A32_3", element: "A3", dimension: "A32", type: "A", text: "Saya menyesuaikan strategi kerja lama dengan teknologi digital terbaru agar hasil kerja tetap optimal" },
-                { id: "A32_4", element: "A3", dimension: "A32", type: "A", text: "Saya mempersiapkan tools digital cadangan untuk mengantisipasi gangguan yang digunakan" },
+                { id: "A32_4", element: "A3", dimension: "A32", type: "A", text: "Saya mempersiapkan tools digital cadangan untuk mengantisipasi gangguan saat digunakan" },
                 { id: "A33_1", element: "A3", dimension: "A33", type: "A", text: "Saya memastikan detail pekerjaan tetap akurat meskipun ada penyesuaian sistem digital" },
                 { id: "A33_2", element: "A3", dimension: "A33", type: "A", text: "Saya mengatur ulang alur kerja agar tetap efisien saat ada penyesuaian sistem digital" },
                 { id: "A33_3", element: "A3", dimension: "A33", type: "A", text: "Saya memanfaatkan fitur teknologi digital yang baru untuk mempercepat proses kerja tanpa menurunkan kualitas" },
@@ -560,20 +683,20 @@
                 { id: "B11_2", element: "B1", dimension: "B11", type: "A", text: "Proyek yang saya mulai biasanya tetap saya selesaikan meskipun ada hal baru yang lebih menarik" },
                 { id: "B11_3", element: "B1", dimension: "B11", type: "A", text: "Saya menjaga kesinambungan minat meski tantangan membuatnya terasa monoton" },
                 { id: "B11_4", element: "B1", dimension: "B11", type: "A", text: "Saya cenderung menekuni suatu bidang pekerjaan yang sama dalam jangka waktu yang lama" },
-                { id: "B12_1", element: "B1", dimension: "B12", type: "A", text: "Saya tetap melakukan pekerjaan walaupun gagal" },
+                { id: "B12_1", element: "B1", dimension: "B12", type: "A", text: "Saya tetap melanjutkan pekerjaan walau hasilnya tidak sesuai harapan" },
                 { id: "B12_2", element: "B1", dimension: "B12", type: "A", text: "Saya menyelesaikan pekerjaan sampai tuntas meski harus menanggung beban ekstra" },
                 { id: "B12_3", element: "B1", dimension: "B12", type: "A", text: "Saya mengusahakan sumber daya tambahan untuk menyelesaikan pekerjaan yang terasa sulit" },
                 // Curiosity (B2)
-                { id: "B2_1", element: "B2", dimension: "B2", type: "B", textI: "Saya senang mempelajari berbagai teknologi digital baru walau tidak ada yang meminta", textD: "Saya terdorong mengeksplorasi teknologi digital baru secara lebih dalam ketika merasa ada yang kurang jelas" },
-                { id: "B2_2", element: "B2", dimension: "B2", type: "B", textI: "Saya mempelajari beragam fitur digital untuk memperluas pengetahuan", textD: "Saya tidak tenang jika ada fitur digital baru belum saya pahami fungsinya" },
-                { id: "B2_3", element: "B2", dimension: "B2", type: "B", textI: "Saya merasa antusias saat menemukan inovasi digital yang dapat meningkatkan efisiensi kerja", textD: "Saya sulit berhenti memikirkan masalah teknis akibat gangguan digital sampai menemukan solusinya" },
-                { id: "B2_4", element: "B2", dimension: "B2", type: "B", textI: "Saya tertarik mempelajari teknologi digital yang belum pernah saya gunakan sebelumnya", textD: "Saya merasa perlu memahami semua fitur teknologi digital agar bisa mahir menggunakan" },
-                { id: "B2_5", element: "B2", dimension: "B2", type: "B", textI: "Saya termotivasi mempelajari inovasi digital demi memperluas wawasan", textD: "Saya termotivasi mempelajari inovasi digital karena tuntutan pekerjaan" },
-                { id: "B2_6", element: "B2", dimension: "B2", type: "B", textI: "Saya suka mencoba fitur-fitur baru pada aplikasi digital untuk menemukan cara kerja yang paling efektif", textD: "Saya mengikuti perkembangan digital untuk menjaga kesempatan agar eksis dalam pekerjaan saya" },
-                { id: "B2_7", element: "B2", dimension: "B2", type: "B", textI: "Saya mempelajari perkembangan teknologi digital untuk menemukan cara memperbaiki proses kerja", textD: "Saya mempelajari perkembangan teknologi digital untuk memastikan tidak tertinggal" },
-                { id: "B2_8", element: "B2", dimension: "B2", type: "B", textI: "Saya tertarik mencoba berbagai fitur teknologi digital di luar fungsi utamanya", textD: "Saya mengeksplorasi teknologi digital untuk memastikan semua fitur nya dapat digunakan" },
-                { id: "B2_9", element: "B2", dimension: "B2", type: "B", textI: "Saya senang mengeksplorasi berbagai alat digital untuk menemukan fungsi tambahan", textD: "Saya mempelajari berbagai alat digital untuk memastikan penggunaan fungsinya sesuai kebutuhan" },
-                { id: "B2_10", element: "B2", dimension: "B2", type: "B", textI: "Saya mencoba fitur-fitur baru pada aplikasi digital karena menikmati pengalamannya", textD: "Saya mempelajari fitur baru pada aplikasi digital sampai saya memahami cara kerjanya secara menyeluruh" },
+                { id: "B2_1", element: "B2", dimension: "B21", type: "B", textI: "Saya senang mempelajari berbagai teknologi digital baru walau tidak ada yang meminta", textD: "Saya terdorong mengeksplorasi teknologi digital baru secara lebih dalam ketika merasa ada yang kurang jelas" },
+                { id: "B2_2", element: "B2", dimension: "B21", type: "B", textI: "Saya berinisiatif mempelajari tren digital untuk memperluas pengetahuan", textD: "Saya tidak tenang jika ada fitur digital yang belum saya pahami fungsinya" },
+                { id: "B2_3", element: "B2", dimension: "B21", type: "B", textI: "Saya merasa antusias saat menemukan inovasi digital yang dapat meningkatkan efisiensi kerja", textD: "Saya sulit berhenti memikirkan masalah teknis akibat gangguan digital sampai menemukan solusinya" },
+                { id: "B2_4", element: "B2", dimension: "B21", type: "B", textI: "Saya tertarik mencoba teknologi digital yang belum pernah saya gunakan sebelumnya", textD: "Saya merasa perlu memahami semua fitur teknologi digital sebelum mulai menggunakan" },
+                { id: "B2_5", element: "B2", dimension: "B21", type: "B", textI: "Saya termotivasi mempelajari inovasi digital demi memperluas wawasan", textD: "Saya termotivasi mempelajari inovasi digital karena tuntutan pekerjaan" },
+                { id: "B2_6", element: "B2", dimension: "B21", type: "B", textI: "Saya suka mencoba fitur-fitur baru pada aplikasi digital untuk menemukan cara kerja yang paling efektif", textD: "Saya mengikuti pelatihan digital untuk menguasai keterampilan yang diperlukan dalam pekerjaan saya" },
+                { id: "B2_7", element: "B2", dimension: "B21", type: "B", textI: "Saya mempelajari perkembangan teknologi digital untuk menemukan cara memperbaiki proses kerja", textD: "Saya mempelajari perkembangan teknologi digital untuk memastikan tidak tertinggal" },
+                { id: "B2_8", element: "B2", dimension: "B21", type: "B", textI: "Saya tertarik mencoba berbagai fitur teknologi digital di luar fungsi utamanya", textD: "Saya mengeksplorasi teknologi digital untuk memastikan semua fiturnya dapat digunakan" },
+                { id: "B2_9", element: "B2", dimension: "B21", type: "B", textI: "Saya senang mengeksplorasi berbagai alat digital untuk menemukan fungsi tambahan", textD: "Saya mempelajari berbagai alat digital untuk memastikan penggunaan fungsinya sesuai kebutuhan" },
+                { id: "B2_10", element: "B2", dimension: "B21", type: "B", textI: "Saya mencoba fitur-fitur baru pada aplikasi digital karena menikmati pengalamannya", textD: "Saya mempelajari fitur baru pada aplikasi digital sampai saya memahami cara kerjanya secara menyeluruh" },
             ];
 
             const dimensionDetails = {
@@ -641,14 +764,16 @@
             const instructionTextContainer = document.getElementById('instruction-text-container');
             const elementsContainer = document.getElementById('elements-container');
 
-            const sliderLabelsText = {
-                1: "Sangat Tidak Sesuai",
-                2: "Tidak Sesuai",
-                3: "Agak Tidak Sesuai",
-                4: "Cukup Sesuai",
-                5: "Sesuai",
-                6: "Sangat Sesuai"
-            };
+            // Gunakan array agar akses label konsisten (index 0 = 1, dst)
+            const sliderLabelsText = [
+                null, // index 0 tidak dipakai
+                "Sangat Tidak Sesuai",
+                "Tidak Sesuai",
+                "Agak Tidak Sesuai",
+                "Cukup Sesuai",
+                "Sesuai",
+                "Sangat Sesuai"
+            ];
             
             // =================================================================================
             // Fungsi Inti
@@ -828,16 +953,28 @@
                         questionHTML += `
                             <p class="question-text">${q.text}</p>
                             <div class="slider-container" style="position:relative;padding-bottom:40px;">
-                                <div class="slider-value-popup">${sliderLabelsText[value]}</div>
+                                <div class="slider-value-popup">${sliderLabelsText[parseInt(value)]}</div>
                                 <input type="range" id="q_${q.id}" data-question-id="${q.id}" data-index="${originalIndex}" min="1" max="6" value="${value}" step="1" style="width:100%;margin-bottom:32px;">
-                                <div class="slider-slicing" style="position:absolute;left:0;right:0;top:32px;height:8px;width:100%;pointer-events:none;">
+                                <div class="slider-ticks" style="position:absolute;left:0;right:0;top:15px;height:28px;width:100%;z-index:3;pointer-events:none;">
+                                    ${[1,2,3,4,5,6].map(i => `
+                                        <div class="slider-tick" style="position:absolute;left:${((i-1)/5)*100}%;transform:translateX(-50%);top:5px;height:28px;width:2px;border-radius:1px;cursor:pointer;pointer-events:auto;z-index:3;" data-value="${i}" title="${sliderLabelsText[i]}"></div>
+                                    `).join('')}
                                     ${[1,2,3,4,5].map(i => `
-                                        <div style="position:absolute;left:${(i/6)*100}%;top:0;height:8px;width:2px;background:#adb5bd;"></div>
+                                        <div class="slider-tick-minor" style="position:absolute;left:${(i/6)*100}%;top:11px;height:16px;width:1px;pointer-events:none;border-radius:0.5px;opacity:0.3;"></div>
                                     `).join('')}
                                 </div>
                                 <div class="slider-labels" style="display:flex;justify-content:space-between;position:absolute;left:0;right:0;top:64px;width:100%;">
+                                    <!--
+                                        Urutan label harus sesuai value slider:
+                                        1 = Sangat Tidak Sesuai
+                                        2 = Tidak Sesuai
+                                        3 = Agak Tidak Sesuai
+                                        4 = Cukup Sesuai
+                                        5 = Sesuai
+                                        6 = Sangat Sesuai
+                                    -->
                                     ${[1,2,3,4,5,6].map(i => `
-                                        <span style="font-size:0.85rem;color:${value==i?'var(--accent-green-darker)':'#6c757d'};font-weight:${value==i?'bold':'normal'};width:16%;text-align:center;">${sliderLabelsText[i]}</span>
+                                        <span style="font-size:0.85rem;color:${parseInt(value)===i?'var(--accent-green-darker)':'#6c757d'};font-weight:${parseInt(value)===i?'bold':'normal'};width:16%;text-align:center;" data-slider-value="${i}">${sliderLabelsText[i]}</span>
                                     `).join('')}
                                 </div>
                             </div>`;
@@ -862,32 +999,33 @@
                 
                 addQuestionEventListeners();
                 updateNavButtons();
+                
+                // Ensure all sliders are properly initialized after DOM update
+                setTimeout(() => {
+                    document.querySelectorAll('input[type="range"]').forEach(slider => {
+                        updateSliderAppearance(slider);
+                    });
+                }, 50);
             }
 
 
             function addQuestionEventListeners() {
                 // Event untuk bulatan slider agar bisa dipilih langsung
                 document.querySelectorAll('.slider-step-dot').forEach(dot => {
-                    dot.addEventListener('click', (e) => {
+                    function setSliderValue(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
                         const sliderId = e.target.getAttribute('data-slider-id');
-                        const step = e.target.getAttribute('data-step');
+                        const step = parseInt(e.target.getAttribute('data-step'));
                         const slider = document.getElementById(sliderId);
                         if (slider) {
                             slider.value = step;
                             updateSliderAppearance(slider);
-                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                            handleAnswer(slider.dataset.questionId, step, parseInt(slider.dataset.index));
                         }
-                    });
-                    dot.addEventListener('touchstart', (e) => {
-                        const sliderId = e.target.getAttribute('data-slider-id');
-                        const step = e.target.getAttribute('data-step');
-                        const slider = document.getElementById(sliderId);
-                        if (slider) {
-                            slider.value = step;
-                            updateSliderAppearance(slider);
-                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
-                        }
-                    });
+                    }
+                    dot.addEventListener('click', setSliderValue);
+                    dot.addEventListener('touchstart', setSliderValue);
                 });
                 // Slider thumb jadi tombol jika value 1
                 document.querySelectorAll('input[type="range"]').forEach(slider => {
@@ -923,25 +1061,82 @@
                 // Event untuk label minimum agar bisa memilih nilai 1 langsung
                 document.querySelectorAll('.slider-label-min').forEach(label => {
                     function setSliderMin(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
                         const sliderId = e.target.getAttribute('data-slider-id');
                         const slider = document.getElementById(sliderId);
                         if (slider) {
                             slider.value = 1;
                             updateSliderAppearance(slider);
-                            handleAnswer(slider.dataset.questionId, slider.value, parseInt(slider.dataset.index));
+                            handleAnswer(slider.dataset.questionId, 1, parseInt(slider.dataset.index));
                         }
                     }
                     label.addEventListener('click', setSliderMin);
                     label.addEventListener('touchstart', setSliderMin);
                 });
+                
+                // Event untuk slider ticks (garis penanda) agar bisa diklik langsung
+                document.querySelectorAll('.slider-tick').forEach((tick) => {
+                    tick.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const targetValue = parseInt(e.target.getAttribute('data-value'));
+                        const sliderContainer = e.target.closest('.slider-container');
+                        const slider = sliderContainer.querySelector('input[type="range"]');
+                        if (slider && targetValue) {
+                            slider.value = targetValue;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, targetValue, parseInt(slider.dataset.index));
+                        }
+                    });
+                });
+                
+                // Event untuk semua label slider agar bisa diklik langsung
+                // Hilangkan fungsi tombol pada label slider
+                // Aktifkan kembali fungsi tombol pada label slider
+                document.querySelectorAll('.slider-labels span').forEach((label, index) => {
+                    label.style.cursor = 'pointer';
+                    label.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const sliderContainer = e.target.closest('.slider-container');
+                        const slider = sliderContainer.querySelector('input[type="range"]');
+                        if (slider) {
+                            const targetValue = parseInt(label.getAttribute('data-slider-value'));
+                            slider.value = targetValue;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, targetValue, parseInt(slider.dataset.index));
+                        }
+                    });
+                    // Touch event untuk mobile
+                    label.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const sliderContainer = e.target.closest('.slider-container');
+                        const slider = sliderContainer.querySelector('input[type="range"]');
+                        if (slider) {
+                            const targetValue = parseInt(label.getAttribute('data-slider-value'));
+                            slider.value = targetValue;
+                            updateSliderAppearance(slider);
+                            handleAnswer(slider.dataset.questionId, targetValue, parseInt(slider.dataset.index));
+                        }
+                    });
+                });
                 document.querySelectorAll('input[type="range"]').forEach(slider => {
-                    updateSliderAppearance(slider);
+                    // Force update appearance after DOM is ready
+                    setTimeout(() => {
+                        updateSliderAppearance(slider);
+                    }, 10);
+                    
                     // Set jawaban setiap kali slider digeser (termasuk ke nilai 1)
                     slider.addEventListener('input', (e) => {
-                        updateSliderAppearance(slider);
+                        updateSliderAppearance(e.target);
                         handleAnswer(e.target.dataset.questionId, e.target.value, parseInt(e.target.dataset.index));
                     });
-                    slider.addEventListener('change', (e) => handleAnswer(e.target.dataset.questionId, e.target.value, parseInt(e.target.dataset.index)));
+                    slider.addEventListener('change', (e) => {
+                        updateSliderAppearance(e.target);
+                        handleAnswer(e.target.dataset.questionId, e.target.value, parseInt(e.target.dataset.index));
+                    });
                     slider.addEventListener('mousedown', (e) => e.target.previousElementSibling.style.opacity = '1');
                     slider.addEventListener('touchstart', (e) => e.target.previousElementSibling.style.opacity = '1');
                     slider.addEventListener('mouseup', (e) => e.target.previousElementSibling.style.opacity = '0');
@@ -951,15 +1146,21 @@
                         const sliderEl = e.target;
                         const rect = sliderEl.getBoundingClientRect();
                         const clickX = e.clientX - rect.left;
-                        const percent = clickX / rect.width;
+                        const percent = Math.max(0, Math.min(1, clickX / rect.width));
                         const min = parseFloat(sliderEl.min);
                         const max = parseFloat(sliderEl.max);
                         const range = max - min;
                         const rawValue = (percent * range) + min;
-                        const newValue = Math.round(rawValue);
-                        sliderEl.value = Math.max(min, Math.min(max, newValue));
-                        sliderEl.dispatchEvent(new Event('input', { bubbles: true }));
-                        sliderEl.dispatchEvent(new Event('change', { bubbles: true }));
+                        const newValue = Math.max(min, Math.min(max, Math.round(rawValue)));
+                        
+                        // Force set the value
+                        sliderEl.value = newValue;
+                        
+                        // Update appearance immediately
+                        updateSliderAppearance(sliderEl);
+                        
+                        // Trigger events
+                        handleAnswer(sliderEl.dataset.questionId, newValue, parseInt(sliderEl.dataset.index));
                     });
                 });
 
@@ -998,23 +1199,60 @@
 
 
             function updateSliderAppearance(slider) {
-                const value = slider.value;
-                const min = slider.min;
-                const max = slider.max;
+                const value = parseInt(slider.value);
+                const min = parseInt(slider.min);
+                const max = parseInt(slider.max);
                 const percentage = ((value - min) / (max - min)) * 100;
                 
                 const colorStops = ['var(--color-score-1)', 'var(--color-score-2)', 'var(--color-score-3)', 'var(--color-score-4)', 'var(--color-score-5)', 'var(--color-score-6)', 'var(--color-score-7)'];
                 const colorIndex = Math.min(Math.round((percentage/100) * (colorStops.length - 1)), colorStops.length-1);
                 const color = colorStops[colorIndex];
                 
-                slider.style.background = `linear-gradient(to right, ${color} ${percentage}%, var(--slider-track-color) ${percentage}%)`;
+                // Force update background with !important priority
+                slider.style.setProperty('background', `linear-gradient(to right, ${color} ${percentage}%, var(--slider-track-color) ${percentage}%)`, 'important');
                 slider.style.setProperty('--thumb-color', color);
 
                 const popup = slider.previousElementSibling;
-                popup.textContent = sliderLabelsText[value];
-                const thumbWidth = 24;
-                const popupPosition = (percentage / 100) * (slider.offsetWidth - thumbWidth) + (thumbWidth / 2);
-                popup.style.left = `${popupPosition}px`;
+                if (popup && popup.classList.contains('slider-value-popup')) {
+                    popup.textContent = sliderLabelsText[value] || `Value ${value}`;
+                    const thumbWidth = 24;
+                    const popupPosition = (percentage / 100) * (slider.offsetWidth - thumbWidth) + (thumbWidth / 2);
+                    popup.style.left = `${popupPosition}px`;
+                }
+                
+                // Update labels color
+                const container = slider.closest('.slider-container');
+                if (container) {
+                    const labels = container.querySelectorAll('.slider-labels span');
+                    labels.forEach((label, index) => {
+                        const labelValue = index + 1;
+                        if (labelValue === value) {
+                            label.style.color = 'var(--accent-green-darker)';
+                            label.style.fontWeight = 'bold';
+                        } else {
+                            label.style.color = '#6c757d';
+                            label.style.fontWeight = 'normal';
+                        }
+                    });
+                    
+                    // Update tick colors
+                    const ticks = container.querySelectorAll('.slider-tick');
+                    ticks.forEach((tick) => {
+                        const tickValue = parseInt(tick.getAttribute('data-value'));
+                        if (tickValue === value) {
+                            tick.style.setProperty('background', color, 'important');
+                            tick.style.setProperty('opacity', '1', 'important');
+                            tick.style.transform = 'scaleY(1.2)';
+                            tick.style.boxShadow = `0 2px 6px ${color}40`;
+                        } else {
+                            // Reset to default CSS styling
+                            tick.style.removeProperty('background');
+                            tick.style.removeProperty('opacity');
+                            tick.style.transform = 'scaleY(1)';
+                            tick.style.boxShadow = '';
+                        }
+                    });
+                }
             }
 
             function getColorForSliderValue(value) {
